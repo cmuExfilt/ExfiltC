@@ -1,0 +1,158 @@
+\chapter{rxrawv}
+
+Here, we look into the $rx_raw$ module.
+
+\begin{chunk}{parameters}
+
+#(parameter $CKSM_CHK$=1)
+
+\end{chunk}
+
+The parameters $rx_raw$ used are:
+
+$CKSM_CHK$: From mac.v $RX_CKSM_CHECK$
+
+\begin{chunk}{inoutputs}
+
+(input $usr_clk$,
+ input $reset_n$,
+
+ // config
+ input        promiscuous,
+ input        jumboframes,
+ input [47:0] $mac_addr_filter$,
+ output [31:0] $rx_count$,
+
+ // phy interface
+ input       $int_rx_clk$,
+ input [7:0] $int_rx_din$,
+ input       $int_rx_dv$,
+ input       $int_rx_er$,
+
+ // user interface
+ output [31:0] $rx_data$,
+ output        $rx_sof$,
+ output        $rx_dv$,
+ input         $rx_ack$,
+
+ output [17:0] debug);
+
+\end{chunk}
+
+The inoutputs are:
+
+$usr_clk$: From mac.v, $usr_clk$
+$reset_n$: From mac.v, $reset_n$
+
+// config
+promiscuous: From mac.v, promisuous
+jumboframes: From mac.v, jumboframes
+$mac_addr_filter$: From mac.v, $rx_raw_mac_addr$
+$rx_count$: To mac.v, $rx_raw_count$
+
+ // phy interface
+$int_rx_clk$: From mac.v, $int_rx_clk$
+$int_rx_din$: From mac.v, $int_rx_din$
+$int_rx_dv$: From mac.v, $int_rx_dv$
+$int_rx_er$: From mac.v, $int_rx_er$
+
+ // user interface
+$rx_data$: To mac.v, $rx_raw_data$
+$rx_sof$: To mac.v, $rx_raw_sof$
+$rx_dv$: To mac.v, $rx_raw_dv$
+$rx_ack$: From mac.v, $rx_raw_ack$
+
+debug: To mac.v, $rx_debug$
+
+\begin{chunk}{crcgen}
+$
+wire crc_init;
+wire [7:0] crc_data;
+wire crc_good;
+generate if (CKSM_CHK == 1) begin
+   crc_chk U_crc_chk
+     (.clk(int_rx_clk), .reset_n(reset_n), 
+      .init(crc_init), .data(crc_data), .good(crc_good));
+end
+else begin
+   assign crc_good = 1'b1;
+end
+endgenerate
+$
+\end{chunk}
+
+this part of code send data to $crc_chk$ to generate the crc code for the data.
+And the crc code is on $crc_good$
+
+\begin{chunk}{rxpktfifo}
+$
+wire rfq_we;
+wire [13:0] rfq_din;
+wire rfq_ready;
+wire rfq_dv;
+wire [13:0] rfq_dout;
+wire rfq_ack;
+wire rfq_empty;
+wire rfq_full;
+
+rx_pkt_fifo U_rx_pkt_fifo
+  (.reset_n(reset_n), .int_rx_clk(int_rx_clk), .usr_clk(usr_clk),
+   .we(rfq_we), .din(rfq_din), .ready(rfq_ready),
+   .dv(rfq_dv), .dout(rfq_dout), .ack(rfq_ack),
+   .fifo_empty(rfq_empty), .fifo_full(rfq_full));
+$
+\end{chunk}
+
+This part of code calls $rx_pkt_fifo$ to check if fifo is ready and could do what we want it to do.
+
+
+\begin{chunk}{rxfifo}
+$
+wire [35:0] rxff_din;
+wire rxff_we;
+wire rxff_almost_full;
+wire [35:0] rxff_dout;
+wire rxff_empty;
+wire rxff_ack;
+wire rxff_full;
+rxfifo U_rxfifo
+  (.rst(~reset_n),
+   .wr_clk(int_rx_clk), .din(rxff_din), .wr_en(rxff_we), 
+   .full(rxff_full), .almost_full(rxff_almost_full),
+   .rd_clk(usr_clk), .dout(rxff_dout), .rd_en(rxff_ack), .empty(rxff_empty));
+$
+\end{chunk}
+
+This part of code calls for the wrapper $rxfifo.v$ from the coregen of spartan3e.
+
+\begin{chunk}{rxengineraw}
+$
+rx_engine_raw U_rx_engine_raw
+  (.clk(int_rx_clk), .reset_n(reset_n),
+   .promiscuous(promiscuous), .jumboframes(jumboframes),
+   .mac_addr_filter(mac_addr_filter), .rx_count(rx_count),
+   .int_rx_din(int_rx_din), .int_rx_dv(int_rx_dv), .int_rx_er(int_rx_er),
+   .crc_init(crc_init), .crc_data(crc_data), .crc_good(crc_good),
+   .rxff_din(rxff_din), .rxff_we(rxff_we), .rxff_almost_full(rxff_almost_full),
+   .rfq_din(rfq_din), .rfq_we(rfq_we), .rfq_ready(rfq_ready));
+$
+\end{chunk}
+
+This part of code calls for $rx_engine_raw$ to 
+
+
+\begin{chunk}{rxusrif}
+$
+rx_usr_if U_rx_usr_if
+  (.clk(usr_clk), .reset_n(reset_n),
+   .rxff_dout(rxff_dout), .rxff_empty(rxff_empty), .rxff_ack(rxff_ack),
+   .rfq_dout(rfq_dout), .rfq_dv(rfq_dv), .rfq_ack(rfq_ack),
+   .rx_data(rx_data), .rx_dv(rx_dv), .rx_sof(rx_sof), .rx_ack(rx_ack),
+   .debug());
+assign debug = { rfq_full, rfq_empty };
+$
+\end{chunk}
+
+This part of code calls $rx_usr_if$ to 
+
+

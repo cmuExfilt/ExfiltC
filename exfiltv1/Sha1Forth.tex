@@ -1,0 +1,721 @@
+\chapter{Sha1 Forth code \cite{30}}
+
+Forth requires words to be defined before they are used so the 
+development of a SHA1 program is naturally bottom-up. But we tend
+to understand tasks top-down. We use literate programming to support this.
+
+\section{Things to know}
+A Forth string is implementation dependent but has been traditionally
+represented as a 1-byte count followed by up to 255 bytes of string.
+\begin{verbatim}
+
+  +-------+------+------+------+------+-----+-----+
+  + count | byte | byte | byte | .... | byte| byte| 
+  +-------+------+------+------+------+-----+-----+
+
+\end{verbatim}
+
+Blocks in the SHA algorithm are 512-bit strings, or 64 bytes.
+
+SHA1 operates on 32-bit ``words''. Forth defines operations by defining
+``words''. These concepts have nothing to do with each other. 
+
+The SHA algorithm is described using 32-bit words but the J1 cpu is
+a 16-bit implementation so we need to define some primitive words that
+operate on the data in 32-bit words. In particular, the SHA1 algorithm
+defines operations on words (section 3 of the standard) as:
+\begin{verbatim}
+Bitwise logical word operations
+
+   X AND Y = bitwise logical "and" of X and Y.
+   X OR Y  = bitwise logical "inclusive-or" of X and Y.
+   X XOR Y = bitwise logical "exclusive-or" of X and Y.
+   NOT Y   = bitwise logical "complement" of X.
+\end{verbatim}
+
+The words {\bf rot}, {\bf -rot}, {\bf OR}, {\bf XOR}, {\bf AND}, {\bf swap}
+are standard Forth words defined as:
+\begin{verbatim}
+ rot ( x1 x2 x3 -- x2 x3 x1 )
+-rot ( x1 x2 x3 -- x3 x1 x3 )
+ or  ( x1 x2 -- x )
+xor  ( x1 x2 -- x )
+and  ( x1 x2 -- x )
+swap ( x1 x2 -- x2 x1 )
+\end{verbatim}
+
+The Forth ``double'' implementation of these are
+\begin{chunk}{logicalops}
+\ Double versions of bitwise and, or, xor
+ 
+: DOR ( d1 d2 -- d3 )
+  rot OR -rot OR swap ;
+: DXOR ( d1 d2 -- d3 )
+  rot XOR -rot XOR swap ;
+: DAND ( d1 d2 -- d3 ) 
+  rot AND -rot AND swap ;
+  
+\end{chunk}
+
+In order to understand how these words work you need to know that
+{\bf d1} and {\bf d2} are ``double'' (32-bit) words. This means that they are
+stored on the stack as 2 ``single'' (16-bit) words. So if we look at a
+stack trace of the operations of {\bf DOR} we would see:
+\begin{verbatim}
+initial:  d1hi d1lo d2hi d2lo
+    rot:  d1hi d2hi d2lo d1lo
+     OR:  d1hi d2hi dlo
+   -rot:  dlo  d1hi d2hi
+     OR:  dlo  dhi
+   swap:  dhi  dlo
+\end{verbatim}
+
+\section{The SHA1 standard \cite{30}}
+\subsection{Message Padding}
+
+The purpose of message padding is to make the total length of a padded
+message a multiple of 512 bits. SHA1 sequentially processes blocks of
+512 bits when computing the message digest. The following specifies
+how this padding shall be performed. As a summary, a ``1'' followed by
+m ``0''s followed by a 64-bit integer are appended to the end of the
+message to produce a padded message of length 512 * n. The 64-bit
+integer is the length of the original message. The padded message is then
+processed by the SHA1 as n 512-bit blocks.
+
+Suppose a message has length L $< 2^{64}$. Before it is input to the
+SHA1, the message is padded on the right as follows:
+\begin{enumerate}[a.]
+\item ``1'' is appended. Example: if the original message is ``01010000'',
+this is padded to ``010100001''.
+\item ``0''s are appended. The number of ``0''s will depend on the
+original length of the message. The last 64 bits of the last 512-bit
+block are reserved for the length L of the original message.\\
+Example: Suppose the original message is the bit string
+\begin{verbatim}
+  01100001 01100010 01100011 01100100 01100101
+\end{verbatim}
+After step (a) this gives
+\begin{verbatim}
+  01100001 01100010 01100011 01100100 01100101 1
+\end{verbatim}
+Since L = 40, the number of bits in the above is 41 and 407 ``0''s are
+appended, making the total now 448. This gives (in hex)
+\begin{verbatim}
+  61626364 65800000 00000000 00000000
+  00000000 00000000 00000000 00000000
+  00000000 00000000 00000000 00000000
+  00000000 00000000 
+\end{verbatim}
+\item Obtain the 2-word representation of L, the number of bits in the
+original message.\\
+If L $< 2^{32}$ then the first word is all zeros. Append
+these two words to the padded message.\\
+Example: Suppose the original message is as in (b). Then L = 40 (note that
+L is computed before any padding). The two-word representation of 40 is
+hex \verb|00000000 00000028|. Hence the final padded message in hex is
+\begin{verbatim}
+  61626364 65800000 00000000 00000000
+  00000000 00000000 00000000 00000000
+  00000000 00000000 00000000 00000000
+  00000000 00000000 00000000 00000028
+\end{verbatim}
+The padded message will contain 16 * $n$ words for some $n > 0$. 
+The padded message is regarded as a sequence of $n$ blocks M(1),
+M(2), first characters (or bits) of the message.
+\end{enumerate}
+
+Note that this implementation assumes that the message is already
+properly padded.
+
+\subsection{Functions and Constants used}
+
+A sequence of logical functions $f(0)$, $f(1)$, ..., $f(79)$ is used in
+SHA1. Each $f(t)$, $0 \le t \le 79$, operates on 32-bit words B, C, D,
+and produces a 32-bit word as output. $f(t;B,C,D)$ is defined as follows:
+\begin{verbatim}
+   f(t;B,C,D) = (B AND C) OR ((NOT B) AND D)       (  0 <= t <= 19 )
+   f(t;B,C,D) = B XOR C XOR D                      ( 20 <= t <= 39 )
+   f(t;B,C,D) = (B AND C) OR (B AND D) OR (C AND ) ( 40 <= t <= 59 )
+   f(t;B,C,D) = B XOR C XOR D                      ( 60 <= t <= 79 )
+\end{verbatim}
+
+These are actually 3 distinct functions, defined in Forth as
+\begin{chunk}{logicalfns}
+: __F                 ( dd dc db -- bc or b'd )
+    2DUP D>R DAND 2SWAP DR> DINVERT DAND DOR ;
+
+: __G                 ( d c b -- bc or bd or cd )
+    4DUP DAND D>R  DOR DAND DR>  DOR ;
+
+: __H                 ( d c b -- d xor c xor b )
+    DXOR DXOR ;
+
+\end{chunk}
+
+A sequence of constant words $K(0)$, $K(1)$, ... $K(79)$ is used in
+SHA1. In hex these are given by
+\begin{verbatim}
+  K(t) = 5A827999    (  0 <= t <= 19 )
+  K(t) = 6ED9EBA1    ( 20 <= t <= 39 )
+  K(t) = 8F1BBCDC    ( 40 <= t <= 59 )
+  K(t) = CA62C1D6    ( 60 <= t <= 79 )
+\end{verbatim}
+The implementation uses these as explicit constants 
+in the {\bf transform} word which will be explained later.
+
+\subsection{Computing the message digest}
+Before processing any blocks, the H's are initialized as follows (in hex)
+\begin{verbatim}
+  H0 = 67452301
+  H1 = EFCDAB89
+  H2 = 98BADCFE
+  H3 = 10325476
+  H4 = C3D2E1F0
+\end{verbatim}
+These are set up as explicit contants used in {\bf sha-init}, described
+below.
+
+\section{Forth Implementation}
+\subsection{Storage}
+{\bf SIZE} is a ``double'' location
+
+So we create a {\bf SIZE} ``double'' variable and a {\bf Single-Bytee} 
+variable.
+\begin{chunk}{SIZE}
+2VARIABLE SIZE
+VARIABLE Single-Bytee
+
+\end{chunk}
+
+The name {\bf Message-Digest} is a constant pointer to a memory location
+of 5 32-bit cells to hold the 160 bit SHA1 hash result.
+\begin{chunk}{Message-Digest}
+\ Source program uses: CREATE Message-Digest   5 CELLS ALLOT
+VHERE 5 CELLS VALLOT
+XCONSTANT Message-Digest
+
+\end{chunk}
+
+\subsection{sha1}
+The top level word {\bf sha1} expects the address of a Forth string.
+
+The {\bf sha1} function expects the address of a string at the top of stack.
+It returns the SHA1 sum of the string.
+
+It calls {\bf sha-init} for initialization. This will set up the initial
+bytes in {\bf Message-Digest} to seed the algorithm. It has no final 
+effect on the stack so the initial address argument to {\bf sha1} is
+the top of stack.
+
+We compute the count which computes ( addr1 -- addr2 n ) where $n$ is the
+length of the string at addr1 and addr2 points to the first byte. The
+word {\bf \verb|u>d|} extends the length $n$ to be a double so the 
+stack now looks like 
+\begin{verbatim}
+  ( first-byte-of-string n 0 -- )
+\end{verbatim}
+We then call {\bf sha-update} to compute the SHA1.
+
+It calls {\bf sha-final} to clean up after itself.
+
+It calls {\bf .sha} to print the final result.
+
+\begin{chunk}{sha1}
+\ top level word
+: sha1 ( string-xaddress )
+  sha-init
+  count u>d sha-update
+  sha-final
+.sha ;
+
+\end{chunk}
+
+\subsection{sha-init}
+This puts the {\bf Message-Digest} address on the stack, pushes
+SHA1 constants onto the stack, and stores them into memory. So
+memory at {\bf Message-Digest} now contains the 160-bit constant
+(in hex):
+\begin{verbatim}
+67 45 23 01 EF CD AB 89 98 BA DC FE 10 32 54 76 C3 D2 E1 F0
+\end{verbatim}
+and the memory locate {\bf SIZE} is set to (in hex)
+\begin{verbatim}
+00 00
+\end{verbatim}
+
+\begin{chunk}{sha-init}
+: SHA-INIT          ( -- )
+    \  Initialize Message-Digest with starting constants.
+    Message-Digest
+        din 0x67452301 2OVER 2! CELL xn+
+        din 0xEFCDAB89 2OVER 2! CELL xn+
+        din 0x98BADCFE 2OVER 2! CELL xn+
+        din 0x10325476 2OVER 2! CELL xn+
+        din 0xC3D2E1F0 2SWAP 2!
+    \  Zero bit count.
+    0. SIZE 2! ;
+
+\end{chunk}
+
+\subsection{sha-update}
+do for each 
+\begin{chunk}{sha-update}
+: SHA-UPDATE ( stringxaddr doublelen -- )
+   4 needed
+                         \ Transform 512-bit blocks of message.
+    BEGIN                \ Transform Message-Block?
+        size 2@          \ fetch upper cell (4 bytes) of SIZE variable
+        0x1ff u>d DAND   \ fast modulo 512
+        0x3 DRSHIFT      \ shift result 3 ( for example 511 >> 3 is 63 )
+        D>R              \ save to return stack, name: modshiftcount
+        0x40 U>D DR@ D-  \ grab from return stack, 64 subtract modshiftcount
+        2OVER DU> NOT    \ copy string count compare for loop
+        
+    WHILE                \ Store some of str&len, and transform. 
+                         \ duplicate string and count        
+        4DUP                 ( xstr dlen xstr dlen)
+                         \ 64 subtract dmodshiftcount 
+        0x40 U>D DR@ D-      ( xstr dlen xstr dlen dnewlen)
+                         \ convert len,newlen to single width
+        drop nip             ( xstr dlen xstr len newlen)
+                         \ cut string to newlen
+        /STRING              ( xstr dlen xnewstr (len-newlen) )
+                         \ duplicate the difference, save to rstack
+        U>D 2DUP D>R         ( xstr dlen xnewstr d(len-newlen) )  
+        4SWAP                ( xnewstr d(len-newlen) xstr dlen )
+                         \ grab difference from rstack, 
+                         \ use it to get newlen in top cell
+        DR> D-               ( xnewstr d(len-newlen) xstr dnewlen ) 
+        Message-Block DR@ D+ ( xnewstr d(len-newlen) xstr 
+                             \ dnewlen xmessageaddr+modshiftcount )
+        2SWAP                ( xnewstr d(len-newlen) xstr 
+                             \ xmessageaddr+modshiftcount dnewlen )
+        drop                 ( xnewstr d(len-newlen) xstr 
+                             \ xmessageaddr+modshiftcount newlen )
+        MOVE                 ( xnewstr d(len-newlen) )
+        TRANSFORM            ( xnewstr d(len-newlen) )
+        SIZE 2@              ( xnewstr d(len-newlen) dsize ) 
+        0x40 U>D DR>         ( xnewstr d(len-newlen) dsize 
+                             \  0x40 0 dmodshiftcount)
+        D- 
+        3 DLSHIFT D+ SIZE 2!  ." in" size 2@ d.
+    REPEAT
+    \  Save final fraction of input.
+                         ( stringxaddr doublelen )
+    Message-Block DR> D+ ( stringxaddr doublelen 
+                         \ messageblockxaddr+modshiftcount ) 
+    2SWAP  2DUP          ( stringxaddr 
+                         \ messageblockxaddr+modshiftcount 
+                         \ doublelen doublelen )
+    D>R                  ( stringxaddr messageblockxaddr+modshiftcount 
+                         \ doublelen )
+    drop CMOVE  ( )      \ CMOVE
+    SIZE 2@ DR>  D2* D2* D2* D+ SIZE 2! ( )
+    ;
+    
+\end{chunk}
+
+\subsection{Fetch-Message-Digest}
+This puts 160 bits on the stack
+\begin{chunk}{Fetch-Message-Digest}
+   : Fetch-Message-Digest   ( -- de dd dc db da )
+        4 CELLS U>D Message-Digest D+  ( addr)
+            2DUP 2@ 2SWAP CELL U>D d-  ( e addr)
+            2DUP 2@ 2SWAP CELL U>D d-  ( e d addr)
+            2DUP 2@ 2SWAP CELL U>D d-  ( e d c addr)
+            2DUP 2@ 2SWAP CELL U>D d-  ( e d c b addr)
+                2@ ;                   ( e d c b a)
+
+\end{chunk}
+
+\subsection{Add-to-Message-Digest}
+This adds the 160 bits on the top of the stack to the current SHA1 sum.
+\begin{chunk}{Add-to-Message-Digest}
+    : Add-to-Message-Digest  ( de dd dc db da -- )
+        Message-Digest                 ( e d c b a addr)
+            DTUCK 2+! CELL U>D D+      ( e d c b addr)
+            DTUCK 2+! CELL U>D D+      ( e d c addr)
+            DTUCK 2+! CELL U>D D+      ( e d addr)
+            DTUCK 2+! CELL U>D D+      ( e addr)
+                 2+! ;                 ( )
+
+\end{chunk}
+
+\subsection{transform}
+\begin{chunk}{transform}
+: TRANSFORM         ( -- )
+    Fetch-Message-Digest    ( e d c b a)
+
+    \  Do 80 Rounds of Complicated Processing.
+    0x10  0x0 DO  D>R  6DUP __F din 0x5A827999 D+  DR>  I BLK0  MIX  LOOP
+    0x14 0x10 DO  D>R  6DUP __F din 0x5A827999 D+  DR>  I BLK   MIX  LOOP
+    0x28 0x14 DO  D>R  6DUP __H din 0x6ED9EBA1 D+  DR>  I BLK   MIX  LOOP
+    0x3c 0x28 DO  D>R  6DUP __G din 0x8F1BBCDC D+  DR>  I BLK   MIX  LOOP
+    0x50 0x3c DO  D>R  6DUP __H din 0xCA62C1D6 D+  DR>  I BLK   MIX  LOOP
+
+    Add-to-Message-Digest ;
+
+\end{chunk}
+
+\subsection{blk0}
+{\bf BLK0} converts the first 16 cells of Message-Block to Work-Block.
+{\bf BLK0} takes single-width index i,
+which is added to the base of Message-Block and two-fetched
+\begin{chunk}{blk0}
+: BLK0              ( i -- d )     \  Big Endian
+    CELLS Message-Block rot xn+ 2@ ;
+
+\end{chunk}
+
+\subsection{blk}
+{\bf BLK} converts the remaining cells of Message-Block to Work-Block. 
+{\bf BLK0} takes single-width index i, does some fancy XOR work folding
+into the same double. saves the final result to Message-Block,
+and also returns it ( final double )
+\begin{chunk}{blk}
+: BLK               ( i -- d )
+    DUP  0xd + 0xf AND CELLS Message-Block rot xn+ 2@
+    2 pick 0x8 + 0xf AND CELLS Message-Block rot xn+ 2@  DXOR
+    2 pick 0x2 + 0xf AND CELLS Message-Block rot xn+ 2@  DXOR
+    2 pick       0xf AND CELLS Message-Block rot xn+ 2@  DXOR
+    1 DLROTATE  \  This operation was added for SHA-1.
+    2DUP 4 roll 15 AND CELLS Message-Block rot xn+ 2! ;
+\end{chunk}
+
+\subsection{mix}
+\begin{chunk}{mix}
+\  temp = temp + (m + (a <<< 5)) + e
+: MIX ( e d c b temp a m -- e d c b a )
+    2SWAP 2DUP D>R                   ( e d c b temp m a)( R: a)
+    0x5 DLROTATE d+ d+               ( e d c b temp)    ( R: a)
+    2SWAP D>R  2SWAP D>R  2SWAP D>R  ( e temp)    ( R: a b c d)
+    D+                               ( temp)      ( R: a b c d)
+    \  e = d
+       DR> 2SWAP                     ( e temp)      ( R: a b c)
+    \  d = c
+       DR> 2SWAP                     ( e d temp)      ( R: a b)
+    \  c = (b <<< 30)
+       DR> 0x1e DLROTATE             ( e d temp c)      ( R: a)
+       2SWAP                         ( e d c temp)      ( R: a)
+    \  b = a
+       DR>                           ( e d c temp b)     ( R: )
+    \  a = temp
+       2SWAP                         ( e d c b a)
+    ;
+
+\end{chunk}
+
+\subsection{sha-final}
+
+This allocates 9 bytes called {\bf Final-Count}
+\begin{chunk}{Final-Count}
+VHERE 9 VALLOT
+XCONSTANT Final-Count
+
+\end{chunk}
+\begin{chunk}{sha-final}
+: SHA-FINAL         ( -- )
+    \  Save SIZE for final padding.
+    
+    \ final-count must be 64 bits, so we use 0 0 sizelow sizehi
+    0 0 final-count 2!
+    SIZE 2@
+    Final-Count 4xn+ 2!
+
+    \  Pad so SIZE is 64 bits less than a multiple of 512.
+    Single-Bytee 0x80 2 pick 2 pick C!   ( xsingle-bytee )
+    1 u>d SHA-UPDATE
+    BEGIN  SIZE 2@ 0x1ff u>d DAND 0x1C0 u>d d= NOT WHILE
+        Single-Bytee 0 2 pick 2 pick C!  1 u>d SHA-UPDATE
+    REPEAT
+
+    \ final-count is 64 bits (hence length of 8)
+    Final-Count 8 u>d SHA-UPDATE
+    ;
+
+\end{chunk}
+
+\subsection{sha}
+This {\bf sha} word will write the final the SHA1 hash, on
+the screen by dumping the 20 bytes (160 bits) 
+at location {\bf Messsage-Digest}
+
+\begin{chunk}{sha}
+: .SHA
+cr
+." digest: "
+   Message-Digest 0x20 dump  cr \  Display Message-Digest.
+;
+
+\end{chunk}
+
+\begin{chunk}{sha1forth.fs}
+( SHA-160 Secure Hash Algorithm )
+
+\ Based on code taken from:
+\ http://www.forth.org.ru/~mlg/mirror/home.earthlink.net/~neilbawd/sha1.html
+\ https://github.com/esromneb/Forth-Sha1-16-bit
+\ as modified by Tim Daly
+
+decimal 
+
+\ anew nielsha1
+
+\getchunk{dshift}
+
+\ number of bytes per memory address
+4 CONSTANT CELL
+: CELLS CELL * ;
+
+\ real number of bytes per memory address
+2 CONSTANT QEDCELL
+
+\getchunk{SIZE}
+\getchunk{Message-Digest}
+20 vallot \ burn space for clean printing using dump
+
+\ Source program uses: CREATE Message-Block   16 CELLS ALLOT
+VHERE 16 CELLS VALLOT
+XCONSTANT Message-Block
+
+\getchunk{Final-Count}
+\getchunk{logicalops}
+\getchunk{stackops}
+\getchunk{blk0}
+\getchunk{blk}
+\getchunk{logicalfns}
+\getchunk{mix}
+\getchunk{Fetch-Message-Digest}
+\getchunk{Add-to-Message-Digest}
+\getchunk{transform}
+\getchunk{sha-init}
+\getchunk{sha-update}
+\getchunk{sha-final}
+\getchunk{sha}
+\getchunk{sha1}
+
+hex
+
+\ zero out variable memory.
+\ some of this is taken care of in sha-init
+2000 0 100 0 fill
+
+\end{chunk}
+
+\section{Forth Word Dictionary}
+\subsection{Standard Forth Words}
+The standard words mean:
+\begin{verbatim}
+."                       Write the characters to the terminal until the
+                         matching trailing "
+
+/STRING ( addr1 u1 n -- addr2 u2 ) Adjust the string at addr1 u1 by n
+                                   characters. Return addr2=addr1+n
+                                   with length u2 = u1-n
+
+2! ( x1 x2 addr -- ) Stores two 16-bit words at addr
+
+2@ ( addr -- x1 x2 ) Fetches two 16-bit words at addr
+
+2DUP ( x1 x2 -- x1 x2 x1 x2 ) Dup top 2 cells on stack
+
+2OVER ( x1 x2 x3 x4 -- x1 x2 x3 x4 x1 x2 ) Copy cell pair x1,x2 to stack top
+
+2SWAP ( x1 x2 x3 x4 -- x3 x4 x1 x2 ) Exchange top two cell pairs
+
+2VARIABLE <name> ( - ) Create a dictionary entry for name associated with
+                       two cells of data space. Using <name> returns the
+                       address of the first cell of the data space on 
+                       the stack.
+
+4DUP ( x1 x2 x3 x4 -- x1 x2 x3 x4 x1 x2 x3 x4 ) Dup top 4 cells on stack
+
+4xn+ ( addr1 -- addr2 ) Adds 4 to addr1 yielding addr2
+
+ALLOT ( u -- )           Allocate u bytes of data space beginning 
+                         at the next available location.
+
+CELL is the "word size" of the machine (2 bytes in this case)
+
+CELLS ( n1 -- n2 )       Returns n2, the size in bytes of n1 cells
+
+CONSTANT <name> ( x -- ) Create a dictionary entry for name 
+                         associated with value x
+
+count ( addr1 -- addr2 u ) Returns the length u and the address of the
+                           text portion of the string at addr1
+
+cr                       Write a newline to the terminal
+
+D- ( d1 d2 -- d3 ) Subtracts two signed double
+
+D+ ( d1 d2 -- d3 ) Adds two signed double
+
+D>R ( d -- ) (R: -- d ) move a double from the stack to the return stack
+
+DO ( n1 n2 - ) Establish the loop parameters. This word expects the
+               initial loop index n2 on top o the stack, with the
+               limit value n1 beneath it. These values are removed
+               from the stack and stored elsewhere, usually on the
+               return stack, when DO is executed. 
+
+DU> ( ud1 ud2 -- flag ) Flag is TRUE if the unsigned double ud1 is greater
+                        than the unsigned double ud2.
+
+DR@ ( -- d ) (R: d -- d ) Copies the top double number on the return stack
+                          to the data stack
+
+DROP ( w -- ) Drops top cell off stack
+
+din ( -- wd ) DIN removes the next word from the input stream, converts
+              it to a 32-bit double number wd in the current base, and
+              executes 2literal which leaves the number on the stack. So
+              HEX DIN 12345678 ( -- 5678 1234 )
+
+DRSHIFT ( xhi xlo u -- xhi2 xlo2 ) Shift the double u bits right
+
+DUMP ( addr +n -- )      Display the contents o a memory region of length +n
+                         starting at address addr
+
+HERE ( - addr )          Push the address of the next available location 
+                         in data space onto the stack
+
+MOVE ( addr1 addr2 u -- ) Copy u bytes at addr1 to the destination addr2
+
+NIP ( x1 x2 -- x2 ) Drops the cell below the top of stack
+
+pick ( +n -- x ) Place a copy of the nth entry on top of stack
+                 This is 0-based so 0 pick is dup, 1 pick is over
+
+u>d ( u -- d ) Converts an unsigned number to double on the stack
+               Its definition is 
+   0 constant u>d
+
+VARIABLE <name> ( - )  Create a dictionary entry for name associated with
+                       one cell of data space. Using <name> returns the
+                       address of the cell of the data space on the stack.
+
+xn+ ( addr1 n -- addr2 ) adds signed integer n to addr1 to get addr2
+
+\end{verbatim}
+
+\subsection{Locally defined Forth words}
+These words have been defined specifically for this algorithm.
+\begin{chunk}{stackops}
+\DTUCK ( d1h1 d1lo d2hi d2low -- d2hi d2lo d1hi d1lo d2hi d2low )
+\                         Place a copy of the double below the second
+\                         double on the stack.
+: DTUCK 2swap 2over ; 
+
+\6DUP ( x1 x2 x3 x4 x5 x6 -- x1 x2 x3 x4 x5 x6 x1 x2 x3 x4 x5 x6 ) 
+\            Dup top 6 cells on stack
+: 6DUP 4 xpick 4 xpick 4 xpick ;
+
+\4SWAP ( x1 x2 x3 x4 x5 x6 x7 x8 -- x5 x6 x7 x8 x1 x2 x3 x4 ) 
+\                        Exchange top 4 cell pairs
+: 4SWAP 7 roll 7 roll 7 roll 7 roll ;
+
+\ \\ this is the equivalent of +! 
+\ \\ : +! 2dup @ 3 pick + -rot ! drop ;
+\ two-plus-store
+: 2+! 2dup 2@ 4 xpick d+ 2swap 2! 2drop ;
+
+: DLSHIFT DSHIFT ;
+: DRSHIFT negate DSHIFT ;
+
+: INVERT complement ;
+
+: DINVERT complement swap complement swap ;
+
+: DLROTATE           ( d1 n -- d2 )
+    3DUP  DLSHIFT D>R  32 SWAP -  DRSHIFT DR>  DOR ;
+
+hex
+: LROTATE           ( x n -- x' )
+  0 swap dlshift or ;
+
+: Flip-Endian       ( 0102 -- 0201 )
+    DUP 8 LROTATE 0xFF00 AND
+    SWAP 8 LROTATE 0x00FF AND OR ;
+decimal
+
+\end{chunk}
+
+\subsection{dshift}
+NOTE:This routine needs to be rewritten for the J1 processor
+
+This is a general purpose shift word in assembly coded for Freescale
+HCS12/9S12.  It logically {i.e.,no sign extension} shifts d1 accding
+to the value of n2.  If n2 is positive, n1 is shifted left; if n2 is
+neg, n1 is shifted right.  The absolute value of n2 determines the 
+number of bits of shifting; unchecked error on overflow/underflow
+\begin{chunk}{dshift}
+CODE DSHIFT    ( d1 n2 -- d3 )
+2 IND,Y LDD   \ D <- msword
+4 IND,Y LDX   \ X <- lsword
+0 IND,Y TST   \ test msbyte of n2; is n2 negative?
+MI IF,        \ if n2 is negative, shift right:
+    BEGIN,
+      LSRA    \ shift right,preserve top bit, bot bit->carry INCORRECT
+      RORB    \ rotate right,carry->top bit
+      XGDX    \ D <- lsword, X <- msword, cond.codes unaffected
+      RORA    \ shift right; carry->top.bit,bot bit->carry
+      RORB    \ shift right; carry->top.bit
+      XGDX    \ D <- msword, X <- lsword, cond.codes unaffected
+      1 IND,Y INC
+    GE UNTIL,
+ELSE,         \ if n2 is positive, shift left
+  1 IND,Y TST
+  GT IF,      \ do nothing if index=0
+    BEGIN,
+      XGDX    \ D <- lsword, X <- msword, cond.codes unaffected
+      LSLD    \ shift left,top bit->carry INCORRECT
+      XGDX    \ D <- msword, X <- lsword, cond.codes unaffected
+      ROLB    \ rotate left,carry->bottom bit
+      ROLA    \ rotate left,carry->bottom bit
+      1 IND,Y DEC
+    LE UNTIL,
+  THEN,
+THEN,
+2 ,+Y STD     ( d1.lsword\d3.msword -- ) \ save msword
+2 IND,Y STX   ( -- d3 ) \ save lsword
+RTS
+END.CODE
+
+\end{chunk}
+
+\subsection{Dictionary of Algorithm Words}
+These words are locally defined
+\begin{itemize}
+\item DOR ( d1 d2 -- d3 ) double bitwise or
+\item DXOR ( d1 d2 -- d3 ) double bitwise xor
+\item DAND ( d1 d2 -- d3 ) double bitwise and
+\item DTUCK double-width tuck
+\item 6DUP duplicate 3 double numbers on the stack
+\item 4SWAP
+\item 2+! two-plus-store
+\item DLSHIFT double left shift
+\item DRSHIFT double right shift
+\item INVERT complement
+\item DINVERT double complement
+\item DLROTATE ( d1 n -- d2 ) double left rotate
+\item LROTATE ( x n -- x' ) left rotate
+\item Flip-Endian ( 0102 -- 0201 )
+\item BLK0 ( i -- d ) Convert first 16 cells of Message-Block to Work-Block.
+\item BLK ( i -- d ) Convert remaining cells of Message-Block to Work-Block. 
+\item \verb|__F| ( dd dc db -- bc or b'd )
+\item \verb|__G| ( d c b -- bc or bd or cd )
+\item \verb|__H| ( d c b -- d xor c xor b )
+\item MIX ( e d c b temp a m -- e d c b a ) temp = temp + (m + (a <<< 5)) + e
+\item Fetch-Message-Digest ( -- de dd dc db da )
+\item Add-to-Message-Digest  ( de dd dc db da -- )
+\item TRANSFORM ( -- ) Do 80 Rounds of Complicated Processing.
+\item SHA-INIT ( -- ) Initialize Message-Digest with starting constants.
+\item SHA-UPDATE ( stringxaddr doublelen -- ) Transform 512-bit blocks of message.
+\item SHA-FINAL ( -- )
+\item .SHA ( -- ) Print the final SHA1 hash
+\item sha1 ( string-xaddress ) top level word
+\end{itemize}
+
+
+

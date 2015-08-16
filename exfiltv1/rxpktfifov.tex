@@ -1,0 +1,36 @@
+\chapter{rxpktfifov}
+
+Here, let us look into the $rx_pkt_fifo$.
+
+\begin{chunk}{inoutputs}
+$
+(input usr_clk,
+ input int_rx_clk,
+ input reset_n,
+
+ input we,
+ input [13:0] din,
+ output ready,
+ output dv,
+ output [13:0] dout,
+ input ack,
+ output fifo_empty,
+ output fifo_full);
+$
+\end{chunk}
+
+The inoutputs are:
+$
+usr_clk: From 
+int_rx_clk,
+reset_n,
+
+we,
+din,
+ready,
+dv,
+dout,
+ack,
+fifo_empty,
+fifo_full);
+$

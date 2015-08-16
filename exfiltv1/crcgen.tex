@@ -1,0 +1,31 @@
+\chapter{crcgen}
+
+Here, we look into the $crc_gen.v$ code to see what it does.
+
+\begin{chunk}{inoutputs}
+  module $crc_gen$
+  ( input clk, input reset_n,
+    input init,
+    input [7:0] data,
+    input rden,
+    output [7:0] crc);
+
+\end{chunk}
+
+\begin{enumerate}
+
+\item inputs
+
+clk--clock signal
+$reset_n$--reset signal
+init--initialization signal
+data[7:0]--data array signal
+rden--$control signal$
+
+\item outputs
+
+crc[7:0]--the crc array signal (cyclic redundancy check)
+
+
+
+\end{enumerate}

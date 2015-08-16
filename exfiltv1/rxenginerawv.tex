@@ -1,0 +1,46 @@
+\chapter{rxenginerawv}
+
+$rx_engine_raw$ is part of the Reception blocks of MAC core.
+
+\begin{chunk}{inoutputs}
+
+(input clk, input $reset_n$,
+
+ input        promiscuous,
+ input        jumboframes,
+ input [47:0] $mac_addr_filter$,
+ output [31:0] $rx_count$,
+
+ input [7:0] $int_rx_din$,
+ input       $int_rx_dv$,
+ input       $int_rx_er$,
+
+ output       $crc_init$,
+ output [7:0] $crc_data$,
+ input        $crc_good$,
+
+ output [35:0] $rxff_din$,
+ output       $rxff_we$,
+ input        $rxff_almost_full$,
+
+ output [13:0] $rfq_din$,
+ output        $rfq_we$,
+ input         $rfq_ready$);
+
+\end{chunk}
+
+
+input: promiscuous is from configuration
+
+input: jummboframs is from configuration
+
+input: $mac_addr_filter$ is from configuration
+
+input: $int_rx_din$, $int_rx_dv$ and $int_rx_er$ are from $reconciliation.v$
+
+input: $crc_good$ from $crc_chk.v$
+
+
+
+
+

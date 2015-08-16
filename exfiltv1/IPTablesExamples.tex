@@ -1,0 +1,519 @@
+\chapter{IP Tables Examples\cite{9}}
+\subsection{Show firewall status}
+
+Type the following command as root:
+
+\begin{verbatim}
+# iptables -L -n -v
+\end{verbatim}
+
+Inactive firewall output:
+\begin{verbatim}
+Chain INPUT (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+Chain FORWARD (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+Chain OUTPUT (policy ACCEPT 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+\end{verbatim}
+
+active firewall output:
+\begin{verbatim}
+Chain INPUT (policy DROP 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    0     0 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0 
+          state INVALID
+  394 43586 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0 
+          state RELATED,ESTABLISHED
+   93 17292 ACCEPT     all  --  br0    *       0.0.0.0/0            0.0.0.0/0
+    1   142 ACCEPT     all  --  lo     *       0.0.0.0/0            0.0.0.0/0
+Chain FORWARD (policy DROP 0 packets, 0 bytes)
+ pkts bytes target     prot opt in     out     source               destination
+    0     0 ACCEPT     all  --  br0    br0     0.0.0.0/0            0.0.0.0/0
+    0     0 DROP       all  --  *      *       0.0.0.0/0            0.0.0.0/0 
+          state INVALID
+    0     0 TCPMSS     tcp  --  *      *       0.0.0.0/0            0.0.0.0/0 
+          tcp flags:0x06/0x02 TCPMSS clamp to PMTU
+    0     0 ACCEPT     all  --  *      *       0.0.0.0/0            0.0.0.0/0 
+          state RELATED,ESTABLISHED
+    0     0 wanin      all  --  vlan2  *       0.0.0.0/0            0.0.0.0/0
+    0     0 wanout     all  --  *      vlan2   0.0.0.0/0            0.0.0.0/0
+    0     0 ACCEPT     all  --  br0    *       0.0.0.0/0            0.0.0.0/0
+Chain OUTPUT (policy ACCEPT 425 packets, 113K bytes)
+ pkts bytes target     prot opt in     out     source               destination
+Chain wanin (1 references)
+ pkts bytes target     prot opt in     out     source               destination
+Chain wanout (1 references)
+ pkts bytes target     prot opt in     out     source               destination
+\end{verbatim}
+Where,
+\begin{itemize}
+\item -L : List rules.
+\item -v : Display detailed information.
+\item -n : Display IP address and port in numeric format
+\end{itemize}
+
+\subsection{Firewall with line numbers}
+\begin{verbatim}
+# iptables -n -L -v --line-numbers
+\end{verbatim}
+
+Sample outputs:
+\begin{verbatim}
+Chain INPUT (policy DROP)
+num  target     prot opt source               destination
+1    DROP       all  --  0.0.0.0/0            0.0.0.0/0       
+    state INVALID
+2    ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0       
+    state RELATED
+,ESTABLISHED
+3    ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0
+4    ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0
+Chain FORWARD (policy DROP)
+num  target     prot opt source               destination
+1    ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0
+2    DROP       all  --  0.0.0.0/0            0.0.0.0/0       
+    state INVALID
+3    TCPMSS     tcp  --  0.0.0.0/0            0.0.0.0/0           
+    tcp flags:0x06/0x02 TCPMSS clamp to PMTU
+4    ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0       
+    state RELATED,ESTABLISHED
+5    wanin      all  --  0.0.0.0/0            0.0.0.0/0
+6    wanout     all  --  0.0.0.0/0            0.0.0.0/0
+7    ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0
+Chain OUTPUT (policy ACCEPT)
+num  target     prot opt source               destination
+Chain wanin (1 references)
+num  target     prot opt source               destination
+Chain wanout (1 references)
+num  target     prot opt source               destination
+\end{verbatim}
+
+You can use line numbers to delete or insert new rules into the firewall.
+
+\subsection{INPUT or OUTPUT chain rules}
+\begin{verbatim}
+# iptables -L INPUT -n -v
+# iptables -L OUTPUT -n -v --line-numbers
+\end{verbatim}
+
+\subsection{Stop / Start / Restart the Firewall}
+If you are using CentOS / RHEL / Fedora Linux, enter:
+\begin{verbatim}
+# service iptables stop
+# service iptables start
+# service iptables restart
+\end{verbatim}
+
+You can use the iptables command itself to stop the firewall 
+and delete all rules:
+\begin{verbatim}
+# iptables -F
+# iptables -X
+# iptables -t nat -F
+# iptables -t nat -X
+# iptables -t mangle -F
+# iptables -t mangle -X
+# iptables -P INPUT ACCEPT
+# iptables -P OUTPUT ACCEPT
+# iptables -P FORWARD ACCEPT
+\end{verbatim}
+
+Where,
+\begin{itemize}
+\item -F : Delete all the rules.
+\item -X : Delete chain.
+\item -t table\_name : Select table (called nat or mangle) 
+and delete/flush rules.
+\item -P : Set the default policy.
+\end{itemize}
+
+\subsection{Delete Firewall Rules}
+
+To display line number along with other information for existing rules, enter:
+\begin{verbatim}
+# iptables -L INPUT -n --line-numbers
+# iptables -L OUTPUT -n --line-numbers
+# iptables -L OUTPUT -n --line-numbers | less
+# iptables -L OUTPUT -n --line-numbers | grep 202.54.1.1
+\end{verbatim}
+
+You will get the list of IP. Look at the number on the left, then use 
+number to delete it. For example delete line number 4, enter:
+\begin{verbatim}
+# iptables -D INPUT 4
+\end{verbatim}
+
+OR find source IP 202.54.1.1 and delete from rule:
+\begin{verbatim}
+# iptables -D INPUT -s 202.54.1.1 -j DROP
+\end{verbatim}
+Where,
+\begin{itemize}
+\item -D : Delete one or more rules from the selected chain
+\end{itemize}
+
+\subsection{Insert Firewall Rules}
+
+To insert one or more rules in the selected chain as the given rule 
+number use the following syntax. First find out line numbers, enter:
+\begin{verbatim}
+# iptables -L INPUT -n –line-numbers
+\end{verbatim}
+
+Sample outputs:
+\begin{verbatim}
+Chain INPUT (policy DROP)
+num  target     prot opt source               destination
+1    DROP       all  --  202.54.1.1           0.0.0.0/0
+2    ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0      
+     state NEW,ESTABLISHED
+\end{verbatim}
+
+To insert rule between 1 and 2, enter:
+\begin{verbatim}
+# iptables -I INPUT 2 -s 202.54.1.2 -j DROP
+\end{verbatim}
+
+To view updated rules, enter:
+\begin{verbatim}
+# iptables -L INPUT -n --line-numbers
+\end{verbatim}
+
+Sample outputs:
+\begin{verbatim}
+Chain INPUT (policy DROP)
+num  target     prot opt source               destination
+1    DROP       all  --  202.54.1.1           0.0.0.0/0
+2    DROP       all  --  202.54.1.2           0.0.0.0/0
+3    ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0      
+     state NEW,ESTABLISHED
+\end{verbatim}
+
+\subsection{Save Firewall Rules}
+
+To save firewall rules under CentOS / RHEL / Fedora Linux, enter:
+\begin{verbatim}
+# service iptables save
+\end{verbatim}
+
+In this example, drop an IP and save firewall rules:
+\begin{verbatim}
+# iptables -A INPUT -s 202.5.4.1 -j DROP
+# service iptables save
+\end{verbatim}
+
+For all other distros use the iptables-save command:
+\begin{verbatim}
+# iptables-save > /root/my.active.firewall.rules
+# cat /root/my.active.firewall.rules
+\end{verbatim}
+
+\subsection{Restore Firewall Rules}
+
+To restore firewall rules form a file called 
+/root/my.active.firewall.rules, enter:
+\begin{verbatim}
+# iptables-restore < /root/my.active.firewall.rules
+\end{verbatim}
+
+To restore firewall rules under CentOS / RHEL / Fedora Linux, enter:
+\begin{verbatim}
+# service iptables restart
+\end{verbatim}
+
+\subsection{Set the Default Firewall Policies}
+
+To drop all traffic:
+\begin{verbatim}
+# iptables -P INPUT DROP
+# iptables -P OUTPUT DROP
+# iptables -P FORWARD DROP
+# iptables -L -v -n
+\end{verbatim}
+
+NOTE: You will not able to connect anywhere as all traffic is dropped
+\begin{verbatim}
+# ping teknixx.com
+# wget http://www.kernel.org/pub/linux/kernel/v3.0/testing/linux-3.2-rc5.tar.bz2
+\end{verbatim}
+
+\subsection{Only Block Incoming Traffic}
+
+To drop all incoming / forwarded packets, but allow outgoing traffic, enter:
+\begin{verbatim}
+# iptables -P INPUT DROP
+# iptables -P FORWARD DROP
+# iptables -P OUTPUT ACCEPT
+# iptables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+# iptables -L -v -n
+\end{verbatim}
+
+Now ping and wget should work
+\begin{verbatim}
+# ping teknixx.com
+# wget http://www.kernel.org/pub/linux/kernel/v3.0/testing/linux-3.2-rc5.tar.bz2
+\end{verbatim}
+
+\subsection{Drop Private Network Address On Public Interface}
+
+IP spoofing is nothing but to stop the following IPv4 address ranges
+for private networks on your public interfaces. Packets with
+non-routable source addresses should be rejected using the following
+syntax:
+\begin{verbatim}
+# iptables -A INPUT -i eth1 -s 192.168.0.0/24 -j DROP
+# iptables -A INPUT -i eth1 -s 10.0.0.0/8 -j DROP
+\end{verbatim}
+
+IPv4 Address Ranges For Private Networks
+\begin{itemize}
+\item 10.0.0.0/8 -j (A)
+\item 172.16.0.0/12 (B)
+\item 192.168.0.0/16 (C)
+\item 224.0.0.0/4 (MULTICAST D)
+\item 240.0.0.0/5 (E)
+\item 127.0.0.0/8 (LOOPBACK)
+\end{itemize}
+
+\subsection{Blocking an IP Address}
+
+To block an attackers ip address called 1.2.3.4, enter:
+\begin{verbatim}
+# iptables -A INPUT -s 1.2.3.4 -j DROP
+# iptables -A INPUT -s 192.168.0.0/24 -j DROP
+\end{verbatim}
+
+\subsection{Block Incoming Port}
+
+To block all service requests on port 80, enter:
+\begin{verbatim}
+# iptables -A INPUT -p tcp --dport 80 -j DROP
+# iptables -A INPUT -i eth1 -p tcp --dport 80 -j DROP
+\end{verbatim}
+
+To block port 80 only for an ip address 1.2.3.4, enter:
+\begin{verbatim}
+# iptables -A INPUT -p tcp -s 1.2.3.4 --dport 80 -j DROP
+# iptables -A INPUT -i eth1 -p tcp -s 192.168.1.0/24 --dport 80 -j DROP
+\end{verbatim}
+
+\subsection{Block Outgoing IP Address}
+
+To block outgoing traffic to a particular host or domain 
+such as teknixx.com, enter:
+\begin{verbatim}
+# host -t a teknixx.com
+\end{verbatim}
+
+Sample outputs:
+teknixx.com has address 75.126.153.206
+Note down its ip address and type the following to block 
+all outgoing traffic to 75.126.153.206:
+\begin{verbatim}
+# iptables -A OUTPUT -d 75.126.153.206 -j DROP
+\end{verbatim}
+
+You can use a subnet as follows:
+\begin{verbatim}
+# iptables -A OUTPUT -d 192.168.1.0/24 -j DROP
+# iptables -A OUTPUT -o eth1 -d 192.168.1.0/24 -j DROP
+\end{verbatim}
+
+\subsection{Block Domain}
+
+First, find out all ip address of facebook.com, enter:
+\begin{verbatim}
+# host -t a www.facebook.com
+\end{verbatim}
+
+Sample outputs:
+\begin{verbatim}
+www.facebook.com has address 69.171.228.40
+\end{verbatim}
+
+Find CIDR for 69.171.228.40, enter:
+\begin{verbatim}
+# whois 69.171.228.40 | grep CIDR
+\end{verbatim}
+
+Sample outputs:
+\begin{verbatim}
+CIDR:           69.171.224.0/19
+\end{verbatim}
+
+To prevent outgoing access to www.facebook.com, enter:
+\begin{verbatim}
+# iptables -A OUTPUT -p tcp -d 69.171.224.0/19 -j DROP
+\end{verbatim}
+
+You can also use domain name, enter:
+\begin{verbatim}
+# iptables -A OUTPUT -p tcp -d www.facebook.com -j DROP
+# iptables -A OUTPUT -p tcp -d facebook.com -j DROP
+\end{verbatim}
+
+From the iptables man page:
+
+… specifying any name to be resolved with a remote query such as DNS
+(e.g., facebook.com is a really bad idea), a network IP address (with
+/mask), or a plain IP address …
+
+\subsection{Log and Drop Packets}
+
+Type the following to log and block IP spoofing on public interface called eth1
+\begin{verbatim}
+# iptables -A INPUT -i eth1 -s 10.0.0.0/8 -j LOG --log-prefix "IP_SPOOF A: "
+# iptables -A INPUT -i eth1 -s 10.0.0.0/8 -j DROP
+\end{verbatim}
+
+By default everything is logged to /var/log/messages file.
+\begin{verbatim}
+# tail -f /var/log/messages
+# grep --color 'IP SPOOF' /var/log/messages
+\end{verbatim}
+
+\subsection{Log and Drop Packets}
+
+The -m limit module can limit the number of log entries created per
+time. This is used to prevent flooding your log file. To log and drop
+spoofing per 5 minutes, in bursts of at most 7 entries .
+\begin{verbatim}
+# iptables -A INPUT -i eth1 -s 10.0.0.0/8 -m limit --limit 5/m --limit-burst 7 -j LOG --log-prefix "IP_SPOOF A: "
+# iptables -A INPUT -i eth1 -s 10.0.0.0/8 -j DROP
+\end{verbatim}
+
+\subsection{Drop or Accept Traffic From Mac Address}
+
+Use the following syntax:
+\begin{verbatim}
+# iptables -A INPUT -m mac --mac-source 00:0F:EA:91:04:08 -j DROP
+## *only accept traffic for TCP port # 8080 from mac 00:0F:EA:91:04:07 * ##
+# iptables -A INPUT -p tcp --destination-port 22 -m mac --mac-source 00:0F:EA:91:04:07 -j ACCEPT
+\end{verbatim}
+
+\subsection{Block or Allow Ping Request}
+
+Type the following command to block ICMP ping requests:
+\begin{verbatim}
+# iptables -A INPUT -p icmp --icmp-type echo-request -j DROP
+# iptables -A INPUT -i eth1 -p icmp --icmp-type echo-request -j DROP
+\end{verbatim}
+
+Ping responses can also be limited to certain networks or hosts:
+\begin{verbatim}
+# iptables -A INPUT -s 192.168.1.0/24 -p icmp --icmp-type echo-request -j ACCEPT
+\end{verbatim}
+
+The following only accepts limited type of ICMP requests:
+\begin{verbatim}
+### ** assumed that default INPUT policy set to DROP ** #############
+iptables -A INPUT -p icmp --icmp-type echo-reply -j ACCEPT
+iptables -A INPUT -p icmp --icmp-type destination-unreachable -j ACCEPT
+iptables -A INPUT -p icmp --icmp-type time-exceeded -j ACCEPT
+## ** all our server to respond to pings ** ##
+iptables -A INPUT -p icmp --icmp-type echo-request -j ACCEPT
+\end{verbatim}
+
+\subsection{Open Range of Ports}
+
+Use the following syntax to open a range of ports:
+\begin{verbatim}
+iptables -A INPUT -m state --state NEW -m tcp -p tcp --dport 7000:7010 -j ACCEPT
+\end{verbatim}
+
+\subsection{Open Range of IP Addresses}
+
+Use the following syntax to open a range of IP address:
+\begin{verbatim}
+## only accept connection to tcp port 80 (Apache) 
+## if ip is between 192.168.1.100 and 192.168.1.200 
+iptables -A INPUT -p tcp --destination-port 80 -m iprange --src-range 192.168.1.100-192.168.1.200 -j ACCEPT
+## nat example ##
+iptables -t nat -A POSTROUTING -j SNAT --to-source 192.168.1.20-192.168.1.25
+\end{verbatim}
+
+\subsection{Established Connections and Restaring The Firewall}
+
+When you restart the iptables service it will drop established
+connections as it unload modules from the system under RHEL / Fedora /
+CentOS Linux. Edit, /etc/sysconfig/iptables-config and set
+IPTABLES\_MODULES\_UNLOAD as follows:
+\begin{verbatim}
+IPTABLES_MODULES_UNLOAD = no
+\end{verbatim}
+
+\subsection{Help Iptables Flooding My Server Screen}
+
+Use the crit log level to send messages to a log file instead of console:
+
+\begin{verbatim}
+iptables -A INPUT -s 1.2.3.4 -p tcp --destination-port 80 -j LOG --log-level crit
+\end{verbatim}
+
+\subsection{Block or Open Common Ports}
+
+The following shows syntax for opening and closing common TCP and UDP ports:
+ 
+\begin{verbatim}
+Replace ACCEPT with DROP to block port:
+## open port ssh tcp port 22 ##
+iptables -A INPUT -m state --state NEW -m tcp -p tcp --dport 22 -j ACCEPT
+iptables -A INPUT -s 192.168.1.0/24 -m state --state NEW -p tcp --dport 22 -j ACCEPT
+ 
+## open cups (printing service) udp/tcp port 631 for LAN users ##
+iptables -A INPUT -s 192.168.1.0/24 -p udp -m udp --dport 631 -j ACCEPT
+iptables -A INPUT -s 192.168.1.0/24 -p tcp -m tcp --dport 631 -j ACCEPT
+ 
+## allow time sync via NTP for lan users (open udp port 123) ##
+iptables -A INPUT -s 192.168.1.0/24 -m state --state NEW -p udp --dport 123 -j ACCEPT
+ 
+## open tcp port 25 (smtp) for all ##
+iptables -A INPUT -m state --state NEW -p tcp --dport 25 -j ACCEPT
+ 
+# open dns server ports for all ##
+iptables -A INPUT -m state --state NEW -p udp --dport 53 -j ACCEPT
+iptables -A INPUT -m state --state NEW -p tcp --dport 53 -j ACCEPT
+ 
+## open http/https (Apache) server port to all ##
+iptables -A INPUT -m state --state NEW -p tcp --dport 80 -j ACCEPT
+iptables -A INPUT -m state --state NEW -p tcp --dport 443 -j ACCEPT
+ 
+## open tcp port 110 (pop3) for all ##
+iptables -A INPUT -m state --state NEW -p tcp --dport 110 -j ACCEPT
+ 
+## open tcp port 143 (imap) for all ##
+iptables -A INPUT -m state --state NEW -p tcp --dport 143 -j ACCEPT
+ 
+## open access to Samba file server for lan users only ##
+iptables -A INPUT -s 192.168.1.0/24 -m state --state NEW -p tcp --dport 137 -j ACCEPT
+iptables -A INPUT -s 192.168.1.0/24 -m state --state NEW -p tcp --dport 138 -j ACCEPT
+iptables -A INPUT -s 192.168.1.0/24 -m state --state NEW -p tcp --dport 139 -j ACCEPT
+iptables -A INPUT -s 192.168.1.0/24 -m state --state NEW -p tcp --dport 445 -j ACCEPT
+ 
+## open access to proxy server for lan users only ##
+iptables -A INPUT -s 192.168.1.0/24 -m state --state NEW -p tcp --dport 3128 -j ACCEPT
+ 
+## open access to mysql server for lan users only ##
+iptables -I INPUT -p tcp --dport 3306 -j ACCEPT
+\end{verbatim}
+
+\subsection{Restrict the number of parallel connections}
+
+You can use connlimit module to put such restrictions. To allow 3 ssh connections per client host, enter:
+\begin{verbatim}
+# iptables -A INPUT -p tcp --syn --dport 22 -m connlimit --connlimit-above 3 -j REJECT
+\end{verbatim}
+
+Set HTTP requests to 20:
+\begin{verbatim}
+# iptables -p tcp --syn --dport 80 -m connlimit --connlimit-above 20 --connlimit-mask 24 -j DROP
+\end{verbatim}
+Where,
+\begin{itemize}
+\item –connlimit-above 3 : Match if the number of existing 
+connections is above 3.
+\item –connlimit-mask 24 : Group hosts using the prefix length. 
+For IPv4, this must be a number between (including) 0 and 32.
+\end{itemize}
+

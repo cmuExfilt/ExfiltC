@@ -1,0 +1,27 @@
+\chapter{rxusrifv}
+
+$rx_usr_if$ is part of the Reception blocks of MAC core.
+
+\begin{chunk}{inoutputs}
+
+module $rx_usr_if$
+(input clk, input $reset_n$,
+
+ input [35:0] $rxff_dout$,
+ input $rxff_empty$,
+ output $rxff_ack$,
+
+ input [13:0] $rfq_dout$,
+ input $rfq_dv$,
+ output $rfq_ack$,
+
+ output [31:0] $rx_data$,
+ output $rx_dv$,
+ output $rx_sof$,
+ input $rx_ack$,
+ output [17:0] debug);
+
+
+\end{chunk}
+
+

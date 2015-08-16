@@ -1,0 +1,53 @@
+\chapter{AI and Exfiltration}
+\section{The Problem}
+Exfiltration is rarely accidental and confidential information does
+not move itself. The key question becomes ``How to identify the actor?''
+
+We can take a bottom-up approach to the problem. This involves several
+layers, some of which are traditional and some which are not yet in use.
+
+At the network layer we need to have ``sensors'' which can detect the
+movement of confidential data across the security boundary. Various
+sensing techniques exist. Indeed, we are building a network sensor
+prototype which will detect an exfiltration.
+
+At the monitoring layer we need rules that specify what actions to take.
+Rule-based systems, usually built on SNORT or Linux IPTables,
+allow actions such as DROPing a packet. However, this layer of rules is
+too close to the metal and cannot see exfiltration events over normal
+traffic avenues like FTP or email.
+
+At the alert level we need network logging, again usually using things
+like IPTable LOG rules.
+
+There are issues that arise at the logging layer and above. 
+For any network size, logging is useless if the logs are not reviewed.
+But, almost no matter the size of the network, the number of people
+available to review the logs is not sufficient to act on each event.
+
+A network attack can easly swamp a network log file so that it either
+contains too many entries or simply runs out of storage.
+
+Worse, even if every event was tracked, there needs to be someone who
+can provide an overview of all the events to extract the common elements.
+These common elements need to be ``backtracked'' to find the actor(s).
+
+This ``analysis'' layer is usually missing from network security.
+At best it occurs as a post-mortem after a network breach. But given
+the volume of traffic locally or in a data center, the likelyhood of
+finding an exfiltration pattern is small.
+
+\section{An Artificial Intelligence Approach}
+Traditional Artificial Intelligence (AI) techniques can be applied to this
+problem. Large volumes of data containing small patterns of information
+are the normal domain of these systems. 
+
+Usually the ``sensors'' are human-like, such as cameras for ``eyes'',
+microphones for ``ears'', and robot arms for ``actuators''. But that
+does not have to be the case. In a network environment the ``sensing''
+equipment are low-level hardware and SNORT/IPTables firewall rules.
+
+The AI problem, given the logs and active alerts on the sensors, is to
+find elfiltration events, correlate the events with patterns, and from
+those patterns identify the likely actor(s).
+

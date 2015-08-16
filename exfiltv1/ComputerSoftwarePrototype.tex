@@ -1,0 +1,128 @@
+\chapter{Computer Software Prototype}
+
+The goal is to set up two laptops. One is configured as a THREAT
+machine, the second is configured as the EXFILT machine.
+
+To configure the user machine we need to install Ubuntu,
+hardwire the THREAT machine to the EXFILT machine with a
+crossover cable, and set up a lan between the two machines.
+
+For the THREAT machine, the steps are:
+\begin{enumerate}
+\item Download and burn Ubuntu CD
+\item Install Ubuntu from the CD
+\item Connect the crossover cable
+\item set hostname to THREAT
+\begin{enumerate}
+\item edit /etc/hostname
+\item edit /etc/hosts
+\begin{itemize}
+\item 127.0.0.1 localhost
+\item 127.0.1.1 THREAT
+\item 10.0.0.2  THREAT
+\end{itemize}
+\item edit /etc/network/interfaces
+\begin{verbatim}
+auto eth0
+iface eth0 inet static
+address 10.0.0.2
+gateway 10.0.0.1
+netmask 255.255.255.0
+broadcast 10.0.0.255
+\end{verbatim}
+\end{enumerate}
+\item turn on manual network management 
+\begin{itemize}
+\item edit /etc/NetworkManager/NetworkManger.conf
+\begin{itemize}
+\item comment out dns by putting \# as first character of the line
+\item set managed=true  (says WE are managing the connection)
+\end{itemize}
+\end{itemize}
+\item Set up the lan
+\begin{enumerate}
+\item sudo ifconfig eth0 10.0.0.2 netmask 255.255.255.0 up
+\item sudo route add default gw 10.0.0.1
+\end{enumerate}
+\end{enumerate}
+Notice that the THREAT machine has a single IP address of 10.0.0.2
+and routes traffic to 10.0.0.1
+
+SNORT Malware
+
+https://github.com/rshipp/awesome-malware-analysis
+
+For the EXFILT machine, the steps are:
+\begin{enumerate}
+\item Download and burn Ubuntu CD
+\item Install Ubuntu from the CD
+\item Set up full screen in virtualbox
+\item set hostname to EXFILT
+\item Connect the crossover cable
+\item Set up the lan
+\begin{enumerate}
+\item sudo ifconfig eth1 10.0.0.1 netmask 255.255.255.0 up
+\item sudo route add default gw 192.168.1.1
+\end{enumerate}
+\item wireshark
+\begin{enumerate}
+\item download source https://www.wireshark.org/download.html
+\item bunzip, untar
+\item apt-get update
+\item apt-get install -y bison flex g++ build-essential
+\item install Qt
+\begin{enumerate}
+\item wget http://download.qt.io/official\_releases/qt/5.0/5.0.2/qt-linux-opensource-5.0.2-x86-offline.run
+\item chmod +x qt-linux-opensource-5.0.2-x86-offline.run
+\item ./qt-linux-opensource-5.0.2-x86-offline.run
+\end{enumerate}
+\item ./configure
+\end{enumerate}
+\end{enumerate}
+Notice that the EXFILT machine has 2 IP addresses. The first
+address is 10.0.0.1 which is on the crossover lan. But EXFILT
+also has a wireless address on the 192.168.1 subnet (WLAN1)
+
+With this setup all traffic from the THREAT machine is routed
+through the EXFILT machine. We need to set up EXFILT to act
+as the router on the 10.0.0 subnet. 
+
+\subsection{EXFILT Router setup}
+\begin{itemize}
+\item eth1 lan crossover network 10.0.0.0/8
+\item wlan1 wireless outside network 192.168.1.0/8
+\item EXFILT = 10.0.0.1, THREAT = 10.0.0.2
+\end{itemize}
+
+\subsection{EXFILT software setup}
+\begin{verbatim}
+sudo apt-get install -y flex bison libpcap-dev libpcre3 libpcre3-dev libdnet
+
+tcpdump-4.7.4.tar.gz (http://www.tcpdump.org)
+tar -zxf tcpdump-4.7.4.tar.gz
+cd tcpdump-4.7.4
+./configure && make && sudo make install
+
+wget https://www.snort.org/downloads/snort/daq-2.0.4.tar.gz
+tar -zxf daq-2.0.4.tar.gz
+cd daq-2.0.4
+./configure && make && sudo make install
+
+http://code.google.com/p/libdnet
+tar -zxf libdnet-1.12.tgz
+cd libdnet-1.12
+./configure && make && sudo make install
+
+wget https://www.snort.org/downloads/snort/snort-2.9.7.2.tar.gz
+tar -zxf snort-2.9.7.2.tar.gz
+cd snort-2.9.7.2
+./configure --enable-sourcefire && make && sudo make install
+
+sudo cp /usr/local/lib/libdnet.1.0.1 /usr/local/lib/libdnet.so.1.0.1
+sudo /sbin/ldconfig
+sudo updatedb
+snort -v -i wlan1
+
+\end{verbatim}
+
+

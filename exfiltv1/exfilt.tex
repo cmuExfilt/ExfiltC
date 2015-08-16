@@ -1,0 +1,64 @@
+\documentclass[dvipdfm]{book}
+\input{bookheader.tex}
+\begin{document}
+\begin{titlepage}
+{\center{\includegraphics[scale=0.5]{eps/exfilt.eps}}}
+\vskip 0.1in
+\center{\huge{The EXFILT Project}}
+\center{\large{Timothy Daly, Charles Howard, Ravi Starzl}}
+\center{\large{Nanjie Chenglie, Hua Tang}}
+\center{\huge{\today}}
+\end{titlepage}
+\begin{quote}
+I believe that the time is ripe for significantly better documentation
+of programs, and that we can best achieve this by considering programs
+to be works of literature. Hence, my title ``Literate Programming''.
+
+Let us change our traditional attitude to the construction of programs:
+Instead of imagining that our main task is to instruct a computer what to do,
+let us concentrate rather on explaining to human beings what we want a
+computer to do.
+
+{\bf -- Donald Knuth} \cite{50}
+\end{quote}
+
+This is a literate program. It is oriented toward communicating with
+people and, as a side-effect, communicating with the machine. All of
+the programs, data, and tests are included and are extracted from
+this document to build the system. 
+
+\tableofcontents
+\input{Preface.tex}
+\input{EXFILTPlanSteps.tex}
+\input{ThreatsAndRisks.tex}
+\input{AIandExfiltration.tex}
+\input{Background.tex}
+\input{FTPDetails.tex}
+\input{ThePeopleProblem.tex}
+\input{ComputerSoftwarePrototype.tex}
+\input{FPGAHardwareImplementation.tex}
+\input{Sha1FPGA.tex}
+\input{Sha1Forth.tex}
+\input{MicrosoftRelatedPapers.tex}
+\input{VivadoFPGA.tex}
+\input{MAC.tex}
+\input{crcgen.tex}
+\input{rxrawv.tex}
+\input{rxenginerawv.tex}
+\input{macv.tex}
+\input{MACworkflow.tex}
+\input{reconciliationv.tex}
+\input{j1forth.tex}
+\begin{appendix}
+\input{DE1gpioTest.tex}
+\input{IPTablesExamples.tex}
+\input{makefile.tex}
+\input{tangle.tex}
+\input{reference.tex}
+\end{appendix}
+\input{biblio.tex}
+\cleardoublepage
+\phantomsection
+\addcontentsline{toc}{chapter}{Index}
+\printindex
+\end{document}

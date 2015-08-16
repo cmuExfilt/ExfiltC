@@ -1,0 +1,71 @@
+\chapter{Microsoft Related Papers}
+Abstract from Putnam\cite{15}:
+
+Datacenter workloads demand high computational complexities,
+flexibility, power efficiency, and low cost. It is challenging to
+improve all of these factos simultaneously. To advance datacenter
+capabilities beyond what commodity server designs can provide, we
+have designed and built a composable, reconfigurable fabric to
+accelerate portions of large-scale software services.
+Each instantiation of the fabric consists of a 6x8 2-D torus of
+high-end Stratix V FPGAs embedded into a half-rack of 48
+machines. One FPGA is placed into each server, accessible through
+PCIe, and wired directly to other FPGAs with pairs of 10 Gb SAS
+cables.
+
+In this paper, we describe a medium-scale deployment of
+this fabric on a bed of 1,632 servers, and measure its efficacy in
+accelerating the Bing web search engine. We describe the
+requirements and architecture of the system, detail the
+critical engineering challenges and solutions needed to make
+the system robust in the presence of failures, and measure
+the performance, power, and resilence of the system when
+ranking candidate documents. Under high load, the
+large-scale reconfigurable fabric improves the ranking throughput
+of each server by a factor of 95\% for a fixed latency distribution --
+or, while maintaining equivalent throughput, reduces the tail 
+latency by 29\%.
+
+Abstract from Kim\cite{16}:
+
+Data compression is crucial in large-scale storage servers to save
+both storage and network bandwidth, but it suffers from high
+computational cost. In this work, we present a high throughput FPGA
+based compressor as a PCIe accelerator to achieve CPU resource saving
+and high power efficiency. The proposed compressor is differentiated
+from previous hardware compressors by the following features:
+\begin{enumerate}
+\item Targeting Xpress9 algorithm, whose compression quality is comparable 
+to the best Gzip implementation (level 9)
+\item A scalable multi-engine architecture with various IP blocks to handle
+algorithmic complexity as well as to achieve high throughput
+\item Supporting a heavily multi-threaded server environment with an 
+asynchronous data transfer interface between the host and the accelerator
+\end{enumerate}
+
+The implemented Xpress9 compressor on Altera Stratix V GS performs 1.6-2.4Gbps
+throughput with 7 engines on various compression benchmarks, 
+supporting up to 128 thread contexts.
+
+Abstract from Fowers\cite{17}
+
+Data compression techniques have been the subject of intense study
+over the past several decades due to exponential increases in the
+quantity of data stored and transmitted by computer
+systems. Compression algorithms are traditionally forced to make
+tradeoffs between throughput and compression quality (the ratio of
+original file size to compressed file size). FPGAs represent a
+compelling substrate for streaming applications such as data
+compression thanks to their capacity for deep pipelines and custom
+caching solutions. Unfortunately, data hazards in compression
+algorithms such as LZ77 inhibit the creation of deep pipelines
+without sacrificing some amount of compression quality. In this work
+we detail a scalable fully pipelined FPGA accelerator that performs
+LZ77 compression and static Huffman encoding at rates up to 5.6
+GB/s. Furthermore, we explore tradeoffs between compression quality
+and FPGA area that allow the same throughput at a fraction of the
+logic utilization in exchange for moderate reductions in compression
+quality. Compared to recent FPGA compression studies, our emphasis on
+scalability gives our accelerator a 3.0x advantage in resource
+utilization at equivalent throughput and compression ratio.
+

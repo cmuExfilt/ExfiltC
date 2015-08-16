@@ -1,0 +1,872 @@
+\chapter{J1 Forth Level Network Code}
+The J1 cpu runs the programming language Forth. The file {\bf basewords.fs}
+defines the forth words in terms of the J1 hardware.
+
+\section{English for forth programmers \cite{64}}
+
+There is a difference between spelling a word and saying a word.  In
+normal communication we do not ess-pee-ee-ell-ell words.  Likewise we
+do not normally pronounce punctuation.  (Period.)  Sometimes it is
+necessary to spell for complete understanding but comprehension is
+generally easier when natural language is spoken.
+
+A language may also have special signs \verb|&| symbols which are normally
+``said'', e.g., ``\verb|&|'' and ``\verb|#|'' are normally pronounced
+``and'' and ``number''.  Spelling often has very little relationship to
+the pronunciation, e.g., ``lb'' is ``pound'' and ``cwt'' is ``hundredweight''.
+
+Forth is a language of natural English words and signs using
+machine  oriented  syntax for command and control of machines.
+
+The so-called natural pronunciation of Forth words given in the
+Forth-79 and Forth-83 standard documents are mostly spellings.
+Experience has shown that Forth programs are easier to teach and
+understand when natural English words are used for the special signs.
+
+An obvious example of this is ``\verb|#|''.  The standard documents
+give  ``sharp''  as  its natural pronunciation.  This is patently
+wrong.  The musical sharp sign is similar to it but  different.
+The semantics of all occurrences of ``\verb|#|'' in standard Forth words
+are connected with numbers.  ``\verb|#|'' should be  said  ``number''  and
+spelled ``number-sign''.
+
+The standard specification of ``\verb|@|'' is ``value at $<$address$>$''.
+It makes more sense to say ``value'' than ``fetch''  when  we  read
+it.   Likewise  ``!''  reads  better  as ``set'', which is what the
+function is called in other high-level  languages.   E.g.,  the
+body of the definition of ``DEFINITIONS''
+\begin{verbatim}
+          CURRENT @ CONTEXT !
+\end{verbatim}
+
+reads naturally as
+\begin{verbatim}
+          current value context set
+\end{verbatim}
+
+This says What it does, not How it does it.  This  agrees  with
+the  Forth-83  standard document, which says that ``descriptive''
+names are to be preferred to ``procedural'' names (section 4).
+
+Reflection leads to ``add''  as  the  meaning  of  ``\verb|+!|''.   A
+fragment of code
+\begin{verbatim}
+          0 #LINE !   1 #PAGE +!
+\end{verbatim}
+
+reads naturally as
+\begin{verbatim}
+          zero number-line set   one number-page add
+\end{verbatim}
+
+The so-called natural pronunciation of the apostrophe  ``'''
+is   given   as  ``tick''  in  the  Forth-83  standard  document,
+ignoring  descriptive and procedural names.  A better word  for
+this is ``address''.  This also works well in compounds: from the
+Perry Line-Editor read
+\begin{verbatim}
+     'START   'LINE   'CURSOR   'FIND
+\end{verbatim}
+
+as
+\begin{verbatim}
+     address-start  address-line  address-cursor  address-find
+\end{verbatim}
+
+``compile-time-address''  is a better name for  ``[']''.   In
+general say ``compile-time-name'' for ``[name]''.
+
+The function  of  the  dot  or  period  ``.''  in  Forth  is
+``display''.   The  Forth  word  spelled  ``dot-quote''  is used to
+display a message; the Forth word spelled ``ABORT-quote'' is used
+to abort with a message.  They should be said ``display-message''
+and ``abort-message'', which are perfect descriptions.
+
+Forth has three  common  conventions  for  names  within parentheses.
+
+``(name)'' is the default value of a vectored word.  E.g.,
+\begin{verbatim}
+          (CR)   (KEY)
+\end{verbatim}
+
+``(name)'' is used by ``name''.  E.g.,
+\begin{verbatim}
+          (.)
+\end{verbatim}
+
+``(name)'' is compiled by ``name''.  E.g.,
+\begin{verbatim}
+          (.'')   (ABORT'')   (LOOP)
+\end{verbatim}
+
+Notice that the third case is a subset of the second.
+
+All these uses can be covered by ``primitive''.
+\begin{verbatim}
+     (CR)          primitive CR
+     (KEY)         primitive key
+     (.)           primitive display
+     (.'')          primitive display message
+     (ABORT'')      primitive abort message
+     (LOOP)        primitive loop
+\end{verbatim}
+
+``,''  is  used to lay down values in the dictionary, and we
+say ``lay'' or ``lay down'' or ``build'' for this function.
+
+Just  as  Forth  is  said  to  have  been  discovered, not
+invented, so the foregoing words were discovered in  the  order
+given.  Having come so far, we would like to go the rest of the
+way.
+
+``[`` is used to initiate interpretation, but ``INTERPRET'' is
+a word in the controlled word-set.  We pronounce it ``evaluate''.
+
+A stumbling stone in  learning  Forth  is  the  difference
+between ``]'', ``COMPILE'', and ``[COMPILE]''.
+
+If  we  think  of  ``]''  as  ``construct''  we  have a way to
+distinquish ``]'' from the other two.  ``COMPILE'' will ``compile'' a
+defined word into the dictionary;   ``]''  will  do  whatever  is
+necessary  to  ``construct''  the  dictionary,  including defined
+words, literal values, logical structures, and anything else.
+
+``[COMPILE]''  is  ``compile-time  compile'',  which  accurately
+describes  what it does, compile the next word as a single word
+at compile-time, not run-time.
+
+Some examples to show how this hangs together.
+
+\begin{verbatim}
+     : ASCII  ( -- c ) BL WORD COUNT 1- ABORT'' ?''
+        STATE @ IF [COMPILE] LITERAL THEN ; IMMEDIATE
+\end{verbatim}
+
+``Define   ASCII  BL  word  count  one-minus  abort-message
+question-mark  state   value   if  compile-time-compile literal
+then.  Immediate.''
+
+Note that punctuation  was  not  pronounced.   Punctuation
+can be spelled when necessary for comprehension.
+
+From  the  preceding  paragraph  we  see how ``(`` should be
+pronounced, i.e., ``note''.  Likewise ``.(`` is ``display-note''.
+
+From an integer-ascii conversion definition:
+
+\begin{verbatim}
+     ... [ ASCII A 10 - ] LITERAL ...
+
+     ``... evaluate ascii A 10 minus construct literal ...''
+\end{verbatim}
+
+The prefix ``C'' is  used  in  Forth  to  show  byte-related
+operations.   Just  as  ``cwt''  is pronounced ``hundredweight'' so
+``\verb|C@|'', ``C!'',  and  ``C,''  have  the  pronunciation  ``byte-value'',
+``byte-set'', and ``byte-lay(down)''.
+
+How about ``possibly'' or ``maybe'' for the question mark when
+it is part of a word, e.g., ``maybe DUP'' for ``?DUP'' ?
+
+We  can say ``define'' for ``:'' as we did above.  The ``;'' can
+be silent punctuation, or we can use the  Eastern  ``already'' or
+Western  ``y'know''  until some-one has a better suggestion.
+
+Here  is  a  summary of the suggested pronunciations. 
+\begin{verbatim}
+     #               number
+     @               value
+     !               set
+     +!              add
+     '               address
+     [']             compile-time address
+     .               display
+     .''              display message
+     ABORT''          abort message
+     (name)          primitive name
+     ,               lay down, or lay
+     [               evaluate
+     ]               construct
+     [COMPILE]       compile-time compile
+     (               note
+     .(              display note
+     ?...            maybe ..., or possibly ...
+     :               define
+     ;               already, or y'know.
+\end{verbatim}
+
+The file {\bf nuc.fs} implements the standard words from the Forth
+standard \cite{64} so that the standard words work.
+
+For example, the Forth standard defines the standard word \verb|C@| as
+\begin{verbatim}
+6.1.0870   C@ ``c-fetch'' CORE
+  ( c-addr -- char )
+ Fetch the character stored at c-addr.  When the cell size is greater
+ than character size, the unused high-order bits are all zeroes.
+\end{verbatim}
+
+whereas {\bf nuc.fs} implements this on the J1 as:
+\begin{verbatim}
+: c@    dup @ swap d# 1 and if d# 8 rshift else d# 255 and then ;
+\end{verbatim}
+
+\section{Connecting to the Hardware}
+
+We need to connect the port assignments in the verilog, such as in
+the file topj1.v, to the constants used in the forth code. The forth
+constants are in the ile hwwge.fs. So, for instance, the constant
+6010 in topj1.v is identical to the name \verb|rx_mac_filter| in hwwge.fs.
+
+Next the bootstrap loader {\bf boot.fs} loads the system from flash.
+
+The {\bf nuc.fs} file, mentioned above, implements standard forth words
+on the J1.
+
+The {\bf mac.fs} file contains the {\bf mac-cold} word which handles
+reset of the MII device.
+
+The {\bf morse.fs} file, when loaded, causes the LEDs to flash morse code.
+There are 5 morse letters, (A, H, O, S, V) which mark the current state
+of the process.
+\begin{itemize}
+\item A means the mac interface is ready for the next 32 bits.
+\item S is the sleep state
+\item V is the vertical blank state of the camera
+\end{itemize}
+The alarms and sleep handling are in {\b time.fs}
+
+The routine {\bf mac-cold} in {\bf mac.fs} resets the MAC interface.
+
+The file {\bf continuation.fs} handles saving and restoring program state.
+
+The file {\bf packet.fs} contains the words to handle packet construction,
+transmission, and reception.
+
+The file {\bf ip0.fs} initializes variables for the ip-address, 
+subnet mask, dns, etc.
+
+The file {\bf defines\_tcpip.fs} contains constants defining the
+offsets for various parts of a packet.
+
+The file {\bf defines\_tcpip2.fs} contains constants defining the
+offsets for ethernet packets.
+
+The file {\bf arp.fs} sets up and manages the arp cache.
+
+The file {\bf ip.fs} handles IP ping/response, UDP checksums,
+and ICMP packets.
+
+The file {\bf dhcp.fs} handles DHCP packets and leases.
+
+The file {\bf spi.fs} handles the serial peripheral interface.
+
+The file {\bf flash.fs} handles flash memory.
+
+The file {\bf mt9v.fs} is the hardware interface for camera.
+
+The file {\bf wge.fs} handles the Willow Garage Ethernet camera protocol.
+
+The file {\bf newtcp.fs} handles low level TCP words.
+
+The file {\bf html.fs} constructs an HTML page
+
+The file {\bf http.fs} implements the HTTP protocol
+
+The file {\bf tcpservice.fs} handles the TCP general service scheme.
+
+The file {\bf ntp.fs} handles the network time protocol.
+
+The file {\bf syslog.fs} implements a syslog (RFC 5424)
+
+The file {\bf epa.fs} implements arbitrary precision arithmetic,
+along with the file {\bf reference\_epa.fs}.
+
+The file {\bf i2c} handles the i2c serial interface.
+
+The file {\bf rate.fs} is a rate reporting tool.
+
+The file {\bf testmt9v.fs} is a self-test tool for the camera.
+
+The file {\bf go} is a shell script to start the system.
+
+\section{main.fs}
+\begin{verbatim}
+( Main for WGE firmware                      JCB 13:24 08/24/10)
+
+\ warnings off require tags.fs
+
+include crossj1.fs
+meta
+    : TARGET? 1 ;
+    : ONBENCH 0 ;
+    : SYSLOG 0 ;
+    : DO-XORLINE 1 ;
+    : build-debug? 1 ;
+    : build-tcp? 0 ;
+
+include basewords.fs
+target
+include hwwge.fs
+include boot.fs
+include doc.fs
+
+4 org
+module[ eveything"
+include nuc.fs
+
+create mac         6 allot
+create serial      4 allot
+create camera_name 40 allot
+
+: net-my-mac mac dup @ swap 2+ dup @ swap 2+ @ ;
+
+: halt  [char] # emit begin again ;
+
+: alarm
+    s" ** failed selftest: code " type hex2 cr
+    halt
+;
+
+include version.fs
+include parseversion.fs
+
+: rapidflash
+    time 2+ @ led ! ;
+: morseflash ( code -- )
+    time 2+ @ 2/ h# f and rshift invert led ! ;
+
+include morse.fs
+include time.fs
+include mac.fs
+include continuation.fs
+include packet.fs
+include ip0.fs
+include defines_tcpip.fs
+include defines_tcpip2.fs
+include arp.fs
+include ip.fs
+include dhcp.fs
+
+include spi.fs
+include flash.fs
+
+: hardreset 
+    true trig_reconf ! begin again ;
+
+: softreset
+    ['] emit-uart is emit
+    sleep1 [char] a emit cr sleep1
+    begin dsp h# ff and while drop repeat
+    begin dsp d# 8 rshift while r> drop repeat
+    dsp hex4 cr
+    d# 0 >r
+    sleep1 [char] b emit cr sleep1
+;
+
+include mt9v.fs
+
+: setrouter ( router subnet -- )
+    ip-subnetmask 2! ip-router 2!
+    arp-reset
+    net-my-ip arp-lookup drop arp-announce ;
+
+: guess-mask ( ip -- )
+    ip# 0.0.0.0 \ the world is my LAN
+    ip# 0.0.0.0
+    setrouter
+
+    ip# 255.255.0.0 dand
+    2dup ip# 10.0.0.0 d= if
+        ip# 10.0.0.1 
+        ip# 255.255.248.0 
+        setrouter
+    then
+    2dup ip# 10.68.0.0 d= if
+        ip# 10.68.0.1 
+        ip# 255.255.255.0 
+        setrouter
+    then
+    ip# 10.69.0.0 d= if
+        ip# 10.69.0.11
+        ip# 255.255.255.0 
+        setrouter
+    then
+;
+
+: ip-addr! ( ip -- )
+    2dup ip-addr 2@ d<> if
+        2dup ip-addr 2!
+        guess-mask
+        arp-reset
+    else
+        2drop
+    then
+;
+
+include wge.fs
+build-tcp? [IF]
+    include newtcp.fs
+    include html.fs
+    include http.fs
+    include tcpservice.fs
+[THEN]
+
+
+( IP address formatting                      JCB 14:50 10/26/10)
+
+: #ip1  h# ff and s>d #s 2drop ;
+: #.    [char] . hold ;
+: #ip2  dup #ip1 #. d# 8 rshift #ip1 ;
+: #ip   ( ip -- c-addr u) dup #ip2 #. over #ip2 ;
+
+( net-watchdog                               JCB 09:26 10/13/10)
+
+2variable net-watchdog
+: net-watch-reset
+    d# 10000000. net-watchdog setalarm ;
+: net-watch-expired?
+    net-watchdog isalarm ;
+
+: preip-handler
+    begin
+        enc-fullness
+    while
+        OFFSET_ETH_TYPE packet@ h# 800 =
+        if
+           dhcp-wait-offer
+        then
+        camera-handler
+    repeat
+;
+
+: strlen ( addr -- u ) dup begin count 0= until swap - 1- ;
+
+include ntp.fs
+
+: haveip-handler
+    begin
+        enc-fullness
+    while
+        net-watch-reset
+        arp-handler
+        OFFSET_ETH_TYPE packet@ h# 800 =
+        if
+            d# 2 OFFSET_IP_DSTIP enc-offset enc@n net-my-ip d=
+            if
+                icmp-handler
+                \ IP_PROTO_TCP ip-isproto if servetcp then
+                \ ntp-handler
+            then
+            camera-handler
+        then
+        depth if .s cr then
+        depth d# 6 u> if hardreset then
+    repeat
+;
+
+: bench   
+    cbench
+    d# 1000 >r \ iterations
+    time@
+    r@ negate begin
+        \ d# 33. d# 101. 2d+ drop drop
+        \ d# 33 d# 101 +1c drop
+        \ d# 23 s>q d# 11 d# 17 qm*/ qdrop
+        progress
+
+        d# 1 + dup d# 0 =
+    until drop
+    time@
+    decimal s" bench: " type
+    2swap d- d# 6800 r> m*/ d# 600. d- <# # # [char] . hold #s #> type
+    s"  cycles" type cr
+;
+
+ONBENCH [IF]
+    : banner
+        cr cr
+        d# 64 0do [char] * emit loop cr
+        s" J1 running" type cr
+        cr
+
+        s" Imager:  " type imagerversion @ hex4 cr
+        s" PCB rev: " type pcb_rev @ . cr
+        s" HDL rev: " type hdl_version @ hex4 cr
+        s" FW rev:  " type version type
+            s"  reports as " type version version-n hex d. decimal cr
+        s" serial:  " type serial 2@ d. cr
+        s" MAC:     " type net-my-mac mac-pretty cr
+        cr
+    ;
+    : phy-report s" PHY status: " type d# 1 mac-mii@ hex4 cr ;
+
+    create prev d# 4 allot
+    : clocker
+        time@ prev 2@ d- d# 1000000. d> if
+            time@ prev 2!
+            time@ hex8 space
+            cr
+
+            \ ntp-server arp-lookup if ntp-request then
+        then
+    ;
+[ELSE]
+    : phy-report ;
+[THEN]
+
+: .mii ( reg -- ) \ print MII reg value
+    s" PHY" type dup . mac-mii@ hex4 ;
+
+0 constant MIICONTROL
+1 constant MIISTATUS
+27 constant SPECIALS
+
+: hackit
+    \ MAC seems to need a long reset
+    d# 0 MAC_reset ! sleep.1 d# 1 MAC_reset ! sleep.1
+    \ Turn off auto-neg
+    
+    begin
+         \ Register 0, Bit 12  = 0
+         \ Register 0, Bit 13 = 1
+         \  Register 0, Bit 8 = 1
+        MIICONTROL mac-mii@
+            h# efff and
+            h# 2100 or
+        snap MIICONTROL mac-mii!
+        snap
+        h# 8000 SPECIALS mac-mii!
+        snap
+        MIICONTROL .mii space MIISTATUS .mii space SPECIALS .mii cr
+        sleep1
+    again
+;
+
+SYSLOG [IF]
+include syslog.fs
+[THEN]
+
+: get-dhcp
+    net-my-mac xor mt9v-random d+ dhcp-xid!
+    d# 0. dhcp-alarm setalarm
+
+    d# 1000
+    begin
+        net-my-ip d0=
+    while
+        dhcp-alarm isalarm if
+            dhcp-discover
+            2* d# 8000 min
+            dup d# 1000 m* dhcp-alarm setalarm
+        then
+        preip-handler
+    repeat
+    snap
+    drop
+    depth if begin again then
+;
+
+2variable ntp-alarm
+
+: silence drop ;
+
+: main
+    decimal
+    mt9v-cold
+    atmel-cold
+    atmel-cfg-rd
+    atmel-id-rd
+
+    ONBENCH [IF]
+        banner
+    [THEN]
+
+    \ hackit
+
+    net-my-mac mac-cold
+    phy-report
+
+    net-my-ip d0= if
+        get-dhcp
+    else
+        net-my-ip guess-mask
+    then
+
+    arp-reset
+
+    build-tcp? [IF]
+        tcp-cold
+    [THEN]
+
+    ONBENCH [IF]
+        dhcp-status
+    [THEN]
+    SYSLOG [IF]
+        begin
+            haveip-handler syslog-server arp-lookup 0=
+        while
+            sleep.1
+        repeat
+        s" syslog -> " type syslog-server ip-pretty cr 
+        syslog-cold ['] emit-syslog is emit
+    [ELSE]
+        ['] silence is emit
+    [THEN]
+
+    build-debug? [IF]
+        s" booted serial://" type serial 2@ d.
+        s" from " type
+        h# 3ffe @ if s" mcs" else s" flash" then type
+        s"  ip " type
+        net-my-ip <# #ip #> type space
+        s" xorline=" type
+        [ DO-XORLINE ] literal hex1 space
+        version type
+        cr
+        s" ready" type cr
+    [THEN]
+
+    \ net-my-ip arp-lookup drop arp-announce
+
+    d# 1000000. ntp-alarm setalarm
+    net-watch-reset
+    begin
+        \ clocker
+        inframe invert if
+            haveip-handler
+        then
+        mt9v-cycle
+        net-watch-expired? if
+            net-watch-reset
+            mt9v-cold
+            net-my-mac mac-cold
+        then
+        \ ntp-alarm isalarm if
+        \     ntp-request
+        \     d# 1000000. ntp-alarm setalarm
+        \ then
+    again
+
+    halt
+;
+]module
+
+0 org
+
+code 0jump
+    \ h# 3e00 ubranch
+    main ubranch
+    main ubranch
+end-code
+
+meta
+
+hex
+
+
+: create-output-file w/o create-file throw to outfile ;
+s" j1.mem" create-output-file
+:noname
+    s" @ 20000" type cr
+    4000 0 do i t@ s>d <# # # # # #> type cr 2 +loop
+; execute
+
+s" j1.bin" create-output-file
+:noname 4000 0 do i t@ dup 8 rshift emit emit 2 +loop ; execute
+
+s" j1.lst" create-output-file
+d# 0
+h# 2000 disassemble-block
+ 
+\end{verbatim}
+
+\section{packet.fs}
+
+\begin{verbatim}
+( Packet construction, tx, rx                JCB 13:25 08/24/10)
+module[ packet"
+
+(tpd: two buffers are created of 1500 bytes. They are separated by
+\ create incoming d# 1500 allot
+\ create outgoing d# 1500 allot
+[ 16384 512 - 1500 - ] constant incoming (tpd: 14374)
+[ 16384 512 - 3000 - ] constant outgoing (tpd: 12872)
+
+(tpd: incoming is a constant computed above.)
+
+(tpd: add that constant to the top of the stack)
+
+: enc-offset incoming + ;
+
+: enc-c@    dup @ swap d# 1 and if d# 255 and else d# 8 rshift then ;
+
+: enc@n ( n addr -- d0 .. dn )
+    swap 0do dup @ swap 2+ loop drop ; 
+
+(tpd: add the incoming offset to the TOS and get its value)
+: packet@ incoming + @ ;
+
+(tpd: x -- loptr hiptr)
+: packetd@ incoming + 2@ swap ;
+
+: packetout-off           \  compute offset in output packet
+    outgoing +
+;
+
+( words for constructing packet data         JCB 07:01 08/20/10)
+variable writer
+
+: enc-pkt-begin outgoing writer !  ;
+
+: bump  ( n -- ) writer +! ;
+
+: enc-pkt-c,    ( n -- )
+    h# ff and
+    writer @ d# 1 and if 
+        writer @ @ or 
+    else
+        d# 8 lshift
+    then
+    writer @ !
+    d# 1 bump
+;
+
+: enc-pkt-,     ( n -- ) writer @ ! d# 2 bump ;
+
+: enc-pkt-d,    ( d -- ) enc-pkt-, enc-pkt-, ;
+
+: enc-pkt-2,    ( n0 n1 -- ) swap enc-pkt-, enc-pkt-, ;
+
+: enc-pkt-3,    rot enc-pkt-, enc-pkt-2, ;
+
+: enc-pkt-,0    ( n -- ) 0do d# 0 enc-pkt-, loop ;
+
+: enc-pkt-s,    ( caddr u -- )
+    0do
+        dup c@
+        enc-pkt-c,
+        1+
+    loop
+    drop
+;
+
+: enc-pkt-src ( n offset ) \ copy n words from incoming+offset
+    incoming +
+    swap 0do
+        dup @ enc-pkt-,
+        2+
+    loop
+    drop
+;
+
+: enc! ( n addr -- ) ! ;
+
+: enc-pkt-complete ( -- length = set up TXST and TXND )
+    writer @ outgoing -
+;
+
+(tpd: mac-ready will flash 'A' in morse code in the LEDs)
+
+: mac-ready \ wait until MAC is ready for next 32 bits
+    begin morse-a morseflash MAC_w_stop @ invert until ;
+
+(tpd: MAC_w_stop  6200 
+      MAC_w_sof   6206 start of frame?
+      MAC_w_0     6204 
+      MAC_w_we    6208
+      MAC_w_count 620A )
+
+: enc-send
+    \ enc-pkt-begin
+    \ d# 104 0do i enc-pkt-c, loop
+    \ h# 800 outgoing d# 12 + !
+
+    mac-ready
+
+    d# 1 MAC_w_sof !
+    writer @ 1+ h# fffe and outgoing -
+    dup MAC_w_0 !
+    d# 3 + h# fffc and
+    outgoing d# 2 + + outgoing
+    dup d# 2 + swap @ MAC_w_we !
+
+    d# 0 MAC_w_sof !
+
+    begin
+        MAC_w_stop @ if
+            mac-ready
+        then
+        dup@ MAC_w_0 !
+        d# 2 +
+        dup@ MAC_w_we !
+        d# 2 + 2dup=
+    until
+    2drop
+
+    \ MAC_w_count hex4 cr halt
+;
+
+(tpd: this is called in ip by ip-wrapup, icmp-handler and udp-checksum.
+      this is called in newtcp by tcp-wrapup
+: enc-checksum ( addr nwords -- sum )
+    d# 0 swap
+    0do
+        over @       ( addr sum v )
+        +1c
+        swap 2+ swap
+    loop
+    nip
+    invert
+;
+
+(tpd: this is called in main by the preip-handler and haveip-handler words)
+: enc-fullness ( -- f )
+    time 2+ @ d# 3 rshift led !
+    \ no data => return false
+    \ data+sof => handle it, return true
+    \ data+no sof => ack, return false
+    MAC_rd_dv @                              (tpd: MAC_rd_dv 6102)
+    dup if
+        MAC_rd_sof @ 0= if                   (tpd: MAC_rd_sof 6108)
+            d# 1 MAC_rd_ack !                (tpd: MAC_rd_sof 610C)
+            [char] ! emit
+            drop d# 0 exit
+        then
+        MAC_rd_1 @ incoming !                (tpd: MAC_rd_sof 6104)
+        \ N byte packet, N arrives.  Length takes 2 bytes,
+        \ so (N+2) total bytes. Number of transactions is
+        \ ((N+2)+3) / 4.  Subtract 1 for 1st transaction.
+        \ So number of bytes is ((N+5)&~3)-4.
+
+        MAC_rd_0 @ d# 1500 > if              (tpd: MAC_rd_0 6106)
+            [char] * emit cr
+            MAC_rd_sof @ hex4 cr             (tpd: MAC_rd_sof 6108)
+            begin again
+        then
+        MAC_rd_0 @ d# 5 +                    (tpd: MAC_rd_0 6106)
+        h# fffc and d# 4 -
+        incoming 2+ swap bounds
+        d# 1 MAC_rd_ack !                    (tpd: MAC_rd_ack 610C)
+        begin
+            MAC_rd_dv @ d# 0 = if            (tpd: MAC_rd_dv 6102)
+                \ starved.  if no data after 4 clocks, bail 
+                noop noop noop noop
+                MAC_rd_dv @ d# 0 = if        (tpd: MAC_rd_dv 6102)
+                    [char] % emit
+                    2drop drop d# 0
+                    exit
+                then
+            then
+            MAC_rd_0 @ over ! d# 2 +         (tpd: MAC_rd_0 6106)
+            MAC_rd_1 @ over ! d# 2 +         (tpd: MAC_rd_1 6104)
+            d# 1 MAC_rd_ack !                (tpd: MAC_rd_ack 610C)
+            2dup=
+        until
+        2drop
+    then
+;
+
+]module
+
+\end{verbatim}

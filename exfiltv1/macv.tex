@@ -1,0 +1,75 @@
+\chapter{macv}
+
+Here, we look into the $mac.v$ code to see what it does.
+
+\begin{chunk}{parameters}
+$
+  module mac
+#(parameter USR_CLK_PERIOD=5,
+  parameter RX_CKSM_CHECK=1,
+  parameter RAW_TXIF_COUNT=1, 
+  parameter RAW_RXIF_COUNT=1, 
+  parameter STREAM_TXIF_COUNT=0,
+  parameter STREAM_RXIF_COUNT=0) 
+$
+\end{chunk}
+
+$USR_CLK_PERIOD:$
+Period, in ns, of usr clk. Needed to to generate a sutable clock for the mii management port (mdc) from usr clk.
+
+
+
+\begin{chunk}{inoutputs}
+$
+(input usr_clk, input clk_125, input reset_n,
+
+ // config
+ input        gmii,
+ input        promiscuous,
+ input        jumboframes,
+ input [9:0]  ifg,
+
+ // raw tx interface(s)
+ input  [(RAW_TXIF_COUNT*32)-1:0] tx_raw_data,
+ input  [RAW_TXIF_COUNT-1:0]      tx_raw_sof,
+ input  [RAW_TXIF_COUNT-1:0]      tx_raw_we,
+ output [RAW_TXIF_COUNT-1:0]      tx_raw_stop,
+ output [(RAW_TXIF_COUNT*32)-1:0] tx_raw_count,
+
+ // raw rx interface(s)
+ input  [(RAW_RXIF_COUNT*48)-1:0] rx_raw_mac_addr,
+ output [(RAW_RXIF_COUNT*32)-1:0] rx_raw_data,
+ output [RAW_RXIF_COUNT-1:0]      rx_raw_sof,
+ output [RAW_RXIF_COUNT-1:0]      rx_raw_dv,
+ input  [RAW_RXIF_COUNT-1:0]      rx_raw_ack,
+ output [(RAW_RXIF_COUNT*32)-1:0] rx_raw_count,
+ 
+ // management interface
+ input [0:4]   miim_phyad,
+ input [0:4]   miim_addr,
+ input [0:15]  miim_wdata,
+ input         miim_req,
+ input         miim_we,
+ output        miim_ack,
+ output [15:0] miim_rdata,    
+
+ // PHY interface
+ output [7:0] phy_TXD,
+ output       phy_TXEN,
+ output       phy_GTXCLK,
+ output       phy_TXER,
+ input        phy_TXCLK,
+ input        phy_RXCLK,
+ input [7:0]  phy_RXD,
+ input        phy_RXER,
+ input        phy_RXDV,
+ output       phy_RESET_N,
+
+ output       phy_MDC,
+ inout        phy_MDIO,
+
+ output [31:0] debug);
+$
+\end{chunk}
+
+

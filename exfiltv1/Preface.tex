@@ -1,0 +1,63 @@
+\chapter{Preface}
+Exfiltration of confidential data is a growing concern as collections
+of confidential information grow larger, these become high-value
+targets. One recent example is the loss of 4.2 million records
+containing the background checks for top secret security clearance
+were exfiltrated from the Office of Personnel Management.
+
+There are several layers of defense that could have, and should have,
+been applied to this data. Apparently there was no mechanism to
+recognize that this data was being stolen. At minimum, there ought to
+be a last line of defense alert system.
+
+A last line of defense would at least make people aware that 
+confidential data was being copied. It should monitor the network
+for confidential data transfer and, if any is found, raise an alarm.
+
+The idea behind the current work is to prototype such a last line of
+defense. We consider marking confidential documents held in storage
+and examining data streams to detect that a confidential document is
+being exfiltrated.
+
+In this simple prototype we make several simplifying assumptions.
+
+First, we assume that the data is marked by computing a SHA1 hash.
+This hash can be kept in a network device table. The network device
+computes a hash of document traffic. If the traffic hash matches a
+hash in the table then it is a confidential document and an alert is
+issued. The ``marker'' can be anything but SHA1 is simple.
+
+Second, we assume that our device is ``plug-and-play'' in that it can
+be plugged into the network just prior to leaving the premise.  It
+could be applied in an internal network if there is a secure perimeter
+around the data.
+
+Third, we assume that the data in transit is a copy of the data in
+storage. That is, there is no encryption or obfuscation applied to the
+data between reading from storage and arriving at our device.
+
+Our prototype is originally implemented in C running on a PC in order
+to examine issues. However, it is clear that such an implementation
+cannot keep up with network traffic.
+
+After completing the first prototype we moved on to a Field
+Programmable Gate Array (FPGA) hardware implementation. This can
+operate at network speeds. We have a VHDL hardware interface which
+feeds a primitive VHDL CPU. The CPU is programmed in Forth, a stack
+based language.
+
+\section{Overview}
+
+We set up dual laptops, one containing the confidential information
+and one trying to exfiltrate it. We used Wireshark to get packet
+traces. We wrote C code to extract the confidential ile on the wire
+and recognize that it was confidential. This was the initial prototype
+plan.
+
+Once that prototype was done we moved to an FPGA implementation. The
+implementation uses a VHDL J1 processor which can be programmed in
+Forth. We are working to get the bytes off the wire, into memory, 
+and checking (using SHA1 in Forth) that we have the confidential file.
+This is a hardware implementation of the prototype.
+
+

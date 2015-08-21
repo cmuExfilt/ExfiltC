@@ -1,0 +1,22 @@
+//www.binarytides.com/packet-sniffer-code-c-linux/
+
+//www.binarytides.com/packet-sniffer-code-in-c-using-linux-sockets-bsd-part-2/
+
+//stackoverflow.com/questions/22206791/packet-sniffer-under-linux-in-c-c
+
+//stackoverflow.com/questions/1637835/packet-sniffing-using-raw-sockets-in-linux-in-c
+
+The four links above would be mainly my reference in implementing the sniffer.
+
+Basically, there are two methods, one is using libpcap library, which is more convenient, and the other one is using sockets, which requires more codes. However, for future use of implementing VHDL on FPGA, less packages should be used, so I decided to use the sockets rather than using libpcap.
+
+And the following code is simply creating a raw socket, and recieving data in a loop.
+
+//TCP
+sock_raw = socket(AF_INET , SOCK_RAW , IPPROTO_TCP);
+while(1)
+{
+data_size = recvfrom(sock_raw , buffer , 65536 , 0 , &saddr , &saddr_size);
+}
+
+$ gcc sniffer.c && sudo ./a.out 

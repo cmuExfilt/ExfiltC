@@ -1,0 +1,484 @@
+0000  d4 be d9 50 fa b2 40 3c fc 01 04 85 08 00 45 08   ...P..@<......E.
+0010  05 dc 72 44 40 00 40 06 3f 7c c0 a8 01 02 c0 a8   ..rD@.@.?|......
+0020  01 01 00 14 df 75 e1 89 c7 42 28 0a 7e ea 80 10   .....u...B(.~...
+0030  01 c9 8b 61 00 00 01 01 08 0a 00 f8 b5 03 00 07   ...a............
+0040  27 99 69 6d 70 6f 72 74 20 6a 61 76 61 2e 69 6f   '.import java.io
+0050  2e 49 4f 45 78 63 65 70 74 69 6f 6e 3b 0a 69 6d   .IOException;.im
+0060  70 6f 72 74 20 6a 61 76 61 2e 75 74 69 6c 2e 41   port java.util.A
+0070  72 72 61 79 4c 69 73 74 3b 0a 69 6d 70 6f 72 74   rrayList;.import
+0080  20 6a 61 76 61 2e 75 74 69 6c 2e 43 6f 6c 6c 65    java.util.Colle
+0090  63 74 69 6f 6e 3b 0a 69 6d 70 6f 72 74 20 6a 61   ction;.import ja
+00a0  76 61 2e 75 74 69 6c 2e 4c 69 73 74 3b 0a 69 6d   va.util.List;.im
+00b0  70 6f 72 74 20 6f 72 67 2e 61 70 61 63 68 65 2e   port org.apache.
+00c0  63 6f 6d 6d 6f 6e 73 2e 63 6f 6e 66 69 67 75 72   commons.configur
+00d0  61 74 69 6f 6e 2e 43 6f 6e 66 69 67 75 72 61 74   ation.Configurat
+00e0  69 6f 6e 45 78 63 65 70 74 69 6f 6e 3b 0a 69 6d   ionException;.im
+00f0  70 6f 72 74 20 6f 72 67 2e 61 70 61 63 68 65 2e   port org.apache.
+0100  75 69 6d 61 2e 55 69 6d 61 43 6f 6e 74 65 78 74   uima.UimaContext
+0110  3b 0a 69 6d 70 6f 72 74 20 6f 72 67 2e 61 70 61   ;.import org.apa
+0120  63 68 65 2e 75 69 6d 61 2e 61 6e 61 6c 79 73 69   che.uima.analysi
+0130  73 5f 63 6f 6d 70 6f 6e 65 6e 74 2e 4a 43 61 73   s_component.JCas
+0140  41 6e 6e 6f 74 61 74 6f 72 5f 49 6d 70 6c 42 61   Annotator_ImplBa
+0150  73 65 3b 0a 69 6d 70 6f 72 74 20 6f 72 67 2e 61   se;.import org.a
+0160  70 61 63 68 65 2e 75 69 6d 61 2e 61 6e 61 6c 79   pache.uima.analy
+0170  73 69 73 5f 65 6e 67 69 6e 65 2e 41 6e 61 6c 79   sis_engine.Analy
+0180  73 69 73 45 6e 67 69 6e 65 50 72 6f 63 65 73 73   sisEngineProcess
+0190  45 78 63 65 70 74 69 6f 6e 3b 0a 69 6d 70 6f 72   Exception;.impor
+01a0  74 20 6f 72 67 2e 61 70 61 63 68 65 2e 75 69 6d   t org.apache.uim
+01b0  61 2e 63 61 73 2e 46 53 49 74 65 72 61 74 6f 72   a.cas.FSIterator
+01c0  3b 0a 69 6d 70 6f 72 74 20 6f 72 67 2e 61 70 61   ;.import org.apa
+01d0  63 68 65 2e 75 69 6d 61 2e 6a 63 61 73 2e 4a 43   che.uima.jcas.JC
+01e0  61 73 3b 0a 69 6d 70 6f 72 74 20 6f 72 67 2e 61   as;.import org.a
+01f0  70 61 63 68 65 2e 75 69 6d 61 2e 6a 63 61 73 2e   pache.uima.jcas.
+0200  63 61 73 2e 46 53 4c 69 73 74 3b 0a 69 6d 70 6f   cas.FSList;.impo
+0210  72 74 20 6f 72 67 2e 61 70 61 63 68 65 2e 75 69   rt org.apache.ui
+0220  6d 61 2e 6a 63 61 73 2e 63 61 73 2e 53 74 72 69   ma.jcas.cas.Stri
+0230  6e 67 4c 69 73 74 3b 0a 69 6d 70 6f 72 74 20 6f   ngList;.import o
+0240  72 67 2e 61 70 61 63 68 65 2e 75 69 6d 61 2e 72   rg.apache.uima.r
+0250  65 73 6f 75 72 63 65 2e 52 65 73 6f 75 72 63 65   esource.Resource
+0260  49 6e 69 74 69 61 6c 69 7a 61 74 69 6f 6e 45 78   InitializationEx
+0270  63 65 70 74 69 6f 6e 3b 0a 69 6d 70 6f 72 74 20   ception;.import 
+0280  75 74 69 6c 2e 2a 3b 0a 69 6d 70 6f 72 74 20 65   util.*;.import e
+0290  64 75 2e 63 6d 75 2e 6c 74 69 2e 6f 61 71 61 2e   du.cmu.lti.oaqa.
+02a0  62 69 6f 2e 62 69 6f 61 73 71 2e 73 65 72 76 69   bio.bioasq.servi
+02b0  63 65 73 2e 47 6f 50 75 62 4d 65 64 53 65 72 76   ces.GoPubMedServ
+02c0  69 63 65 3b 0a 69 6d 70 6f 72 74 20 65 64 75 2e   ice;.import edu.
+02d0  63 6d 75 2e 6c 74 69 2e 6f 61 71 61 2e 62 69 6f   cmu.lti.oaqa.bio
+02e0  2e 62 69 6f 61 73 71 2e 73 65 72 76 69 63 65 73   .bioasq.services
+02f0  2e 4c 69 6e 6b 65 64 4c 69 66 65 44 61 74 61 53   .LinkedLifeDataS
+0300  65 72 76 69 63 65 52 65 73 70 6f 6e 73 65 3b 0a   erviceResponse;.
+0310  69 6d 70 6f 72 74 20 65 64 75 2e 63 6d 75 2e 6c   import edu.cmu.l
+0320  74 69 2e 6f 61 71 61 2e 62 69 6f 2e 62 69 6f 61   ti.oaqa.bio.bioa
+0330  73 71 2e 73 65 72 76 69 63 65 73 2e 4f 6e 74 6f   sq.services.Onto
+0340  6c 6f 67 79 53 65 72 76 69 63 65 52 65 73 70 6f   logyServiceRespo
+0350  6e 73 65 3b 0a 69 6d 70 6f 72 74 20 65 64 75 2e   nse;.import edu.
+0360  63 6d 75 2e 6c 74 69 2e 6f 61 71 61 2e 62 69 6f   cmu.lti.oaqa.bio
+0370  2e 62 69 6f 61 73 71 2e 73 65 72 76 69 63 65 73   .bioasq.services
+0380  2e 50 75 62 4d 65 64 53 65 61 72 63 68 53 65 72   .PubMedSearchSer
+0390  76 69 63 65 52 65 73 70 6f 6e 73 65 3b 0a 69 6d   viceResponse;.im
+03a0  70 6f 72 74 20 65 64 75 2e 63 6d 75 2e 6c 74 69   port edu.cmu.lti
+03b0  2e 6f 61 71 61 2e 62 69 6f 2e 62 69 6f 61 73 71   .oaqa.bio.bioasq
+03c0  2e 73 65 72 76 69 63 65 73 2e 50 75 62 4d 65 64   .services.PubMed
+03d0  53 65 61 72 63 68 53 65 72 76 69 63 65 52 65 73   SearchServiceRes
+03e0  70 6f 6e 73 65 2e 44 6f 63 75 6d 65 6e 74 3b 0a   ponse.Document;.
+03f0  69 6d 70 6f 72 74 20 65 64 75 2e 63 6d 75 2e 6c   import edu.cmu.l
+0400  74 69 2e 6f 61 71 61 2e 74 79 70 65 2e 69 6e 70   ti.oaqa.type.inp
+0410  75 74 2e 51 75 65 73 74 69 6f 6e 3b 0a 69 6d 70   ut.Question;.imp
+0420  6f 72 74 20 65 64 75 2e 63 6d 75 2e 6c 74 69 2e   ort edu.cmu.lti.
+0430  6f 61 71 61 2e 74 79 70 65 2e 6b 62 2e 43 6f 6e   oaqa.type.kb.Con
+0440  63 65 70 74 3b 0a 69 6d 70 6f 72 74 20 65 64 75   cept;.import edu
+0450  2e 63 6d 75 2e 6c 74 69 2e 6f 61 71 61 2e 74 79   .cmu.lti.oaqa.ty
+0460  70 65 2e 6b 62 2e 54 72 69 70 6c 65 3b 0a 0a 70   pe.kb.Triple;..p
+0470  75 62 6c 69 63 20 63 6c 61 73 73 20 41 6e 6e 6f   ublic class Anno
+0480  74 61 74 6f 72 20 65 78 74 65 6e 64 73 20 4a 43   tator extends JC
+0490  61 73 41 6e 6e 6f 74 61 74 6f 72 5f 49 6d 70 6c   asAnnotator_Impl
+04a0  42 61 73 65 20 7b 0a 20 20 73 74 61 74 69 63 20   Base {.  static 
+04b0  47 6f 50 75 62 4d 65 64 53 65 72 76 69 63 65 20   GoPubMedService 
+04c0  73 65 72 76 69 63 65 20 3d 20 6e 75 6c 6c 3b 0a   service = null;.
+04d0  0a 20 20 40 4f 76 65 72 72 69 64 65 0a 20 20 70   .  @Override.  p
+04e0  75 62 6c 69 63 20 76 6f 69 64 20 69 6e 69 74 69   ublic void initi
+04f0  61 6c 69 7a 65 28 55 69 6d 61 43 6f 6e 74 65 78   alize(UimaContex
+0500  74 20 61 43 6f 6e 74 65 78 74 29 20 74 68 72 6f   t aContext) thro
+0510  77 73 20 52 65 73 6f 75 72 63 65 49 6e 69 74 69   ws ResourceIniti
+0520  61 6c 69 7a 61 74 69 6f 6e 45 78 63 65 70 74 69   alizationExcepti
+0530  6f 6e 20 7b 0a 20 20 20 20 74 72 79 20 7b 0a 20   on {.    try {. 
+0540  20 20 20 20 20 47 6f 50 75 62 4d 65 64 53 65 72        GoPubMedSer
+0550  76 69 63 65 20 73 65 72 76 69 63 65 20 3d 20 6e   vice service = n
+0560  65 77 20 47 6f 50 75 62 4d 65 64 53 65 72 76 69   ew GoPubMedServi
+0570  63 65 28 22 2e 2f 70 72 6f 6a 65 63 74 2e 70 72   ce("./project.pr
+0580  6f 70 65 72 74 69 65 73 22 29 3b 0a 20 20 20 20   operties");.    
+0590  7d 20 63 61 74 63 68 20 28 43 6f 6e 66 69 67 75   } catch (Configu
+05a0  72 61 74 69 6f 6e 45 78 63 65 70 74 69 6f 6e 20   rationException 
+05b0  65 29 20 7b 0a 20 20 20 20 20 20 2f 2f 20 54 4f   e) {.      // TO
+05c0  44 4f 20 41 75 74 6f 2d 67 65 6e 65 72 61 74 65   DO Auto-generate
+05d0  64 20 63 61 74 63 68 20 62 6c 6f 63 6b 0a 20 20   d catch block.  
+05e0  20 20 20 20 65 2e 70 72 69 6e                         e.prin
+
+0000  d4 be d9 50 fa b2 40 3c fc 01 04 85 08 00 45 08   ...P..@<......E.
+0010  05 dc 72 45 40 00 40 06 3f 7b c0 a8 01 02 c0 a8   ..rE@.@.?{......
+0020  01 01 00 14 df 75 e1 89 cc ea 28 0a 7e ea 80 10   .....u....(.~...
+0030  01 c9 0a 8a 00 00 01 01 08 0a 00 f8 b5 03 00 07   ................
+0040  27 99 74 53 74 61 63 6b 54 72 61 63 65 28 29 3b   '.tStackTrace();
+0050  0a 20 20 20 20 7d 0a 20 20 7d 0a 0a 20 20 40 4f   .    }.  }..  @O
+0060  76 65 72 72 69 64 65 0a 20 20 70 75 62 6c 69 63   verride.  public
+0070  20 76 6f 69 64 20 70 72 6f 63 65 73 73 28 4a 43    void process(JC
+0080  61 73 20 61 4a 43 61 73 29 20 74 68 72 6f 77 73   as aJCas) throws
+0090  20 41 6e 61 6c 79 73 69 73 45 6e 67 69 6e 65 50    AnalysisEngineP
+00a0  72 6f 63 65 73 73 45 78 63 65 70 74 69 6f 6e 20   rocessException 
+00b0  7b 0a 20 20 20 20 2f 2f 20 54 4f 44 4f 20 41 75   {.    // TODO Au
+00c0  74 6f 2d 67 65 6e 65 72 61 74 65 64 20 6d 65 74   to-generated met
+00d0  68 6f 64 20 73 74 75 62 0a 20 20 20 20 46 53 49   hod stub.    FSI
+00e0  74 65 72 61 74 6f 72 20 69 74 20 3d 20 61 4a 43   terator it = aJC
+00f0  61 73 2e 67 65 74 41 6e 6e 6f 74 61 74 69 6f 6e   as.getAnnotation
+0100  49 6e 64 65 78 28 51 75 65 73 74 69 6f 6e 2e 74   Index(Question.t
+0110  79 70 65 29 2e 69 74 65 72 61 74 6f 72 28 29 3b   ype).iterator();
+0120  0a 20 20 20 20 2f 2f 20 53 74 72 69 6e 67 20 44   .    // String D
+0130  6f 63 20 3d 20 61 4a 43 61 73 2e 67 65 74 44 6f   oc = aJCas.getDo
+0140  63 75 6d 65 6e 74 54 65 78 74 28 29 3b 0a 20 20   cumentText();.  
+0150  20 20 51 75 65 73 74 69 6f 6e 20 71 75 65 73 74     Question quest
+0160  69 6f 6e 54 79 70 65 53 79 73 20 3d 20 6e 75 6c   ionTypeSys = nul
+0170  6c 3b 0a 20 20 20 20 69 66 20 28 69 74 2e 68 61   l;.    if (it.ha
+0180  73 4e 65 78 74 28 29 29 20 7b 0a 20 20 20 20 20   sNext()) {.     
+0190  20 71 75 65 73 74 69 6f 6e 54 79 70 65 53 79 73    questionTypeSys
+01a0  20 3d 20 28 51 75 65 73 74 69 6f 6e 29 20 69 74    = (Question) it
+01b0  2e 6e 65 78 74 28 29 3b 0a 20 20 20 20 7d 0a 20   .next();.    }. 
+01c0  20 20 20 53 74 72 69 6e 67 20 74 65 78 74 20 3d      String text =
+01d0  20 71 75 65 73 74 69 6f 6e 54 79 70 65 53 79 73    questionTypeSys
+01e0  2e 67 65 74 54 65 78 74 28 29 3b 0a 20 20 20 20   .getText();.    
+01f0  43 6f 6e 63 65 70 74 20 63 6f 6e 63 65 70 74 54   Concept conceptT
+0200  79 70 65 53 79 73 20 3d 20 6e 75 6c 6c 3b 0a 20   ypeSys = null;. 
+0210  20 20 20 2f 2f 20 53 74 72 69 6e 67 4c 69 73 74      // StringList
+0220  20 63 6f 6e 63 65 70 74 53 74 72 69 6e 67 4c 69    conceptStringLi
+0230  73 74 20 3d 20 6e 75 6c 6c 3b 0a 20 20 20 20 2f   st = null;.    /
+0240  2f 20 46 53 4c 69 73 74 20 6d 65 6e 74 69 6f 6e   / FSList mention
+0250  4c 69 73 74 20 3d 20 6e 75 6c 6c 3b 0a 20 20 20   List = null;.   
+0260  20 4c 69 73 74 3c 53 74 72 69 6e 67 3e 20 63 6f    List<String> co
+0270  6e 63 65 70 74 4c 69 73 74 20 3d 20 6e 75 6c 6c   nceptList = null
+0280  3b 0a 20 20 20 20 4c 69 73 74 3c 44 6f 75 62 6c   ;.    List<Doubl
+0290  65 3e 20 63 6f 6e 66 69 64 65 6e 63 65 4c 69 73   e> confidenceLis
+02a0  74 20 3d 20 6e 75 6c 6c 3b 0a 20 20 20 20 65 64   t = null;.    ed
+02b0  75 2e 63 6d 75 2e 6c 74 69 2e 6f 61 71 61 2e 74   u.cmu.lti.oaqa.t
+02c0  79 70 65 2e 72 65 74 72 69 65 76 61 6c 2e 44 6f   ype.retrieval.Do
+02d0  63 75 6d 65 6e 74 20 64 6f 63 75 6d 65 6e 74 54   cument documentT
+02e0  79 70 65 53 79 73 20 3d 20 6e 75 6c 6c 3b 0a 20   ypeSys = null;. 
+02f0  20 20 20 2f 2f 20 53 74 72 69 6e 67 4c 69 73 74      // StringList
+0300  20 64 6f 63 75 6d 65 6e 74 53 74 72 69 6e 67 4c    documentStringL
+0310  69 73 74 20 3d 20 6e 75 6c 6c 3b 0a 20 20 20 20   ist = null;.    
+0320  54 72 69 70 6c 65 20 74 72 69 70 6c 65 54 79 70   Triple tripleTyp
+0330  65 53 79 73 20 3d 20 6e 75 6c 6c 3b 0a 20 20 20   eSys = null;.   
+0340  20 74 72 79 20 7b 0a 20 20 20 20 20 20 4f 6e 74    try {.      Ont
+0350  6f 6c 6f 67 79 53 65 72 76 69 63 65 52 65 73 70   ologyServiceResp
+0360  6f 6e 73 65 2e 52 65 73 75 6c 74 20 64 69 73 65   onse.Result dise
+0370  61 73 65 4f 6e 74 6f 6c 6f 67 79 52 65 73 75 6c   aseOntologyResul
+0380  74 20 3d 20 73 65 72 76 69 63 65 0a 20 20 20 20   t = service.    
+0390  20 20 20 20 20 20 20 20 20 20 2e 66 69 6e 64 44             .findD
+03a0  69 73 65 61 73 65 4f 6e 74 6f 6c 6f 67 79 45 6e   iseaseOntologyEn
+03b0  74 69 74 69 65 73 50 61 67 65 64 28 74 65 78 74   titiesPaged(text
+03c0  2c 20 30 29 3b 0a 20 20 20 20 20 20 63 6f 6e 63   , 0);.      conc
+03d0  65 70 74 4c 69 73 74 20 3d 20 6e 65 77 20 41 72   eptList = new Ar
+03e0  72 61 79 4c 69 73 74 3c 53 74 72 69 6e 67 3e 28   rayList<String>(
+03f0  29 3b 0a 20 20 20 20 20 20 63 6f 6e 66 69 64 65   );.      confide
+0400  6e 63 65 4c 69 73 74 20 3d 20 6e 65 77 20 41 72   nceList = new Ar
+0410  72 61 79 4c 69 73 74 3c 44 6f 75 62 6c 65 3e 28   rayList<Double>(
+0420  29 3b 0a 20 20 20 20 20 20 63 6f 6e 63 65 70 74   );.      concept
+0430  54 79 70 65 53 79 73 20 3d 20 6e 65 77 20 43 6f   TypeSys = new Co
+0440  6e 63 65 70 74 28 61 4a 43 61 73 29 3b 0a 20 20   ncept(aJCas);.  
+0450  20 20 20 20 66 6f 72 20 28 4f 6e 74 6f 6c 6f 67       for (Ontolog
+0460  79 53 65 72 76 69 63 65 52 65 73 70 6f 6e 73 65   yServiceResponse
+0470  2e 46 69 6e 64 69 6e 67 20 66 69 6e 64 69 6e 67   .Finding finding
+0480  20 3a 20 64 69 73 65 61 73 65 4f 6e 74 6f 6c 6f    : diseaseOntolo
+0490  67 79 52 65 73 75 6c 74 2e 67 65 74 46 69 6e 64   gyResult.getFind
+04a0  69 6e 67 73 28 29 29 20 7b 0a 20 20 20 20 20 20   ings()) {.      
+04b0  20 20 63 6f 6e 63 65 70 74 4c 69 73 74 2e 61 64     conceptList.ad
+04c0  64 28 66 69 6e 64 69 6e 67 2e 67 65 74 43 6f 6e   d(finding.getCon
+04d0  63 65 70 74 28 29 2e 67 65 74 55 72 69 28 29 29   cept().getUri())
+04e0  3b 0a 20 20 20 20 20 20 20 20 63 6f 6e 66 69 64   ;.        confid
+04f0  65 6e 63 65 4c 69 73 74 2e 61 64 64 28 66 69 6e   enceList.add(fin
+0500  64 69 6e 67 2e 67 65 74 53 63 6f 72 65 28 29 29   ding.getScore())
+0510  3b 0a 20 20 20 20 20 20 7d 0a 20 20 20 20 20 20   ;.      }.      
+0520  63 6f 6e 63 65 70 74 54 79 70 65 53 79 73 2e 73   conceptTypeSys.s
+0530  65 74 4e 61 6d 65 28 22 44 69 73 65 61 73 65 20   etName("Disease 
+0540  4f 6e 74 6f 6c 6f 67 79 22 29 3b 0a 20 20 20 20   Ontology");.    
+0550  20 20 2f 2f 63 6f 6e 63 65 70 74 54 79 70 65 53     //conceptTypeS
+0560  79 73 2e 73 65 74 55 72 69 73 28 55 74 69 6c 73   ys.setUris(Utils
+0570  2e 63 72 65 61 74 65 53 74 72 69 6e 67 4c 69 73   .createStringLis
+0580  74 28 61 4a 43 61 73 2c 20 63 6f 6e 63 65 70 74   t(aJCas, concept
+0590  4c 69 73 74 29 29 3b 0a 20 20 20 20 20 20 2f 2f   List));.      //
+05a0  63 6f 6e 63 65 70 74 54 79 70 65 53 79 73 2e 73   conceptTypeSys.s
+05b0  65 74 4d 65 6e 74 69 6f 6e 73 28 55 74 69 6c 73   etMentions(Utils
+05c0  2e 66 72 6f 6d 43 6f 6c 6c 65 63 74 69 6f 6e 54   .fromCollectionT
+05d0  6f 46 53 4c 69 73 74 28 61 4a 43 61 73 2c 20 28   oFSList(aJCas, (
+05e0  43 6f 6c 6c 65 63 74 69 6f 6e                     Collection
+
+0000  d4 be d9 50 fa b2 40 3c fc 01 04 85 08 00 45 08   ...P..@<......E.
+0010  04 e4 72 46 40 00 40 06 40 72 c0 a8 01 02 c0 a8   ..rF@.@.@r......
+0020  01 01 00 14 df 75 e1 89 d2 92 28 0a 7e ea 80 18   .....u....(.~...
+0030  01 c9 d6 e6 00 00 01 01 08 0a 00 f8 b5 03 00 07   ................
+0040  27 99 29 20 63 6f 6e 66 69 64 65 6e 63 65 4c 69   '.) confidenceLi
+0050  73 74 29 29 3b 0a 20 20 20 20 20 20 63 6f 6e 63   st));.      conc
+0060  65 70 74 54 79 70 65 53 79 73 2e 61 64 64 54 6f   eptTypeSys.addTo
+0070  49 6e 64 65 78 65 73 28 61 4a 43 61 73 29 3b 0a   Indexes(aJCas);.
+0080  20 20 20 20 20 20 63 6f 6e 63 65 70 74 4c 69 73         conceptLis
+0090  74 20 3d 20 6e 65 77 20 41 72 72 61 79 4c 69 73   t = new ArrayLis
+00a0  74 3c 53 74 72 69 6e 67 3e 28 29 3b 0a 20 20 20   t<String>();.   
+00b0  20 20 20 63 6f 6e 66 69 64 65 6e 63 65 4c 69 73      confidenceLis
+00c0  74 20 3d 20 6e 65 77 20 41 72 72 61 79 4c 69 73   t = new ArrayLis
+00d0  74 3c 44 6f 75 62 6c 65 3e 28 29 3b 0a 20 20 20   t<Double>();.   
+00e0  20 20 20 63 6f 6e 63 65 70 74 54 79 70 65 53 79      conceptTypeSy
+00f0  73 20 3d 20 6e 65 77 20 43 6f 6e 63 65 70 74 28   s = new Concept(
+0100  61 4a 43 61 73 29 3b 0a 20 20 20 20 20 20 4f 6e   aJCas);.      On
+0110  74 6f 6c 6f 67 79 53 65 72 76 69 63 65 52 65 73   tologyServiceRes
+0120  70 6f 6e 73 65 2e 52 65 73 75 6c 74 20 67 65 6e   ponse.Result gen
+0130  65 4f 6e 74 6f 6c 6f 67 79 52 65 73 75 6c 74 20   eOntologyResult 
+0140  3d 20 73 65 72 76 69 63 65 2e 66 69 6e 64 47 65   = service.findGe
+0150  6e 65 4f 6e 74 6f 6c 6f 67 79 45 6e 74 69 74 69   neOntologyEntiti
+0160  65 73 50 61 67 65 64 28 0a 20 20 20 20 20 20 20   esPaged(.       
+0170  20 20 20 20 20 20 20 74 65 78 74 2c 20 30 2c 20          text, 0, 
+0180  31 30 29 3b 0a 20 20 20 20 20 20 66 6f 72 20 28   10);.      for (
+0190  4f 6e 74 6f 6c 6f 67 79 53 65 72 76 69 63 65 52   OntologyServiceR
+01a0  65 73 70 6f 6e 73 65 2e 46 69 6e 64 69 6e 67 20   esponse.Finding 
+01b0  66 69 6e 64 69 6e 67 20 3a 20 67 65 6e 65 4f 6e   finding : geneOn
+01c0  74 6f 6c 6f 67 79 52 65 73 75 6c 74 2e 67 65 74   tologyResult.get
+01d0  46 69 6e 64 69 6e 67 73 28 29 29 20 7b 0a 20 20   Findings()) {.  
+01e0  20 20 20 20 20 20 63 6f 6e 63 65 70 74 4c 69 73         conceptLis
+01f0  74 2e 61 64 64 28 66 69 6e 64 69 6e 67 2e 67 65   t.add(finding.ge
+0200  74 43 6f 6e 63 65 70 74 28 29 2e 67 65 74 55 72   tConcept().getUr
+0210  69 28 29 29 3b 0a 20 20 20 20 20 20 20 20 63 6f   i());.        co
+0220  6e 66 69 64 65 6e 63 65 4c 69 73 74 2e 61 64 64   nfidenceList.add
+0230  28 66 69 6e 64 69 6e 67 2e 67 65 74 53 63 6f 72   (finding.getScor
+0240  65 28 29 29 3b 0a 20 20 20 20 20 20 7d 0a 20 20   e());.      }.  
+0250  20 20 20 20 63 6f 6e 63 65 70 74 54 79 70 65 53       conceptTypeS
+0260  79 73 2e 73 65 74 4e 61 6d 65 28 22 47 65 6e 65   ys.setName("Gene
+0270  20 4f 6e 74 6f 6c 6f 67 79 22 29 3b 0a 20 20 20    Ontology");.   
+0280  20 20 20 2f 2f 63 6f 6e 63 65 70 74 54 79 70 65      //conceptType
+0290  53 79 73 2e 73 65 74 55 72 69 73 28 55 74 69 6c   Sys.setUris(Util
+02a0  73 2e 63 72 65 61 74 65 53 74 72 69 6e 67 4c 69   s.createStringLi
+02b0  73 74 28 61 4a 43 61 73 2c 20 63 6f 6e 63 65 70   st(aJCas, concep
+02c0  74 4c 69 73 74 29 29 3b 0a 20 20 20 20 20 20 2f   tList));.      /
+02d0  2f 63 6f 6e 63 65 70 74 54 79 70 65 53 79 73 2e   /conceptTypeSys.
+02e0  73 65 74 4d 65 6e 74 69 6f 6e 73 28 55 74 69 6c   setMentions(Util
+02f0  73 2e 66 72 6f 6d 43 6f 6c 6c 65 63 74 69 6f 6e   s.fromCollection
+0300  54 6f 46 53 4c 69 73 74 28 61 4a 43 61 73 2c 20   ToFSList(aJCas, 
+0310  28 43 6f 6c 6c 65 63 74 69 6f 6e 29 20 63 6f 6e   (Collection) con
+0320  66 69 64 65 6e 63 65 4c 69 73 74 29 29 3b 0a 20   fidenceList));. 
+0330  20 20 20 20 20 63 6f 6e 63 65 70 74 54 79 70 65        conceptType
+0340  53 79 73 2e 61 64 64 54 6f 49 6e 64 65 78 65 73   Sys.addToIndexes
+0350  28 61 4a 43 61 73 29 3b 0a 20 20 20 20 20 20 63   (aJCas);.      c
+0360  6f 6e 63 65 70 74 4c 69 73 74 20 3d 20 6e 65 77   onceptList = new
+0370  20 41 72 72 61 79 4c 69 73 74 3c 53 74 72 69 6e    ArrayList<Strin
+0380  67 3e 28 29 3b 0a 20 20 20 20 20 20 63 6f 6e 66   g>();.      conf
+0390  69 64 65 6e 63 65 4c 69 73 74 20 3d 20 6e 65 77   idenceList = new
+03a0  20 41 72 72 61 79 4c 69 73 74 3c 44 6f 75 62 6c    ArrayList<Doubl
+03b0  65 3e 28 29 3b 0a 20 20 20 20 20 20 63 6f 6e 63   e>();.      conc
+03c0  65 70 74 54 79 70 65 53 79 73 20 3d 20 6e 65 77   eptTypeSys = new
+03d0  20 43 6f 6e 63 65 70 74 28 61 4a 43 61 73 29 3b    Concept(aJCas);
+03e0  0a 20 20 20 20 20 20 4f 6e 74 6f 6c 6f 67 79 53   .      OntologyS
+03f0  65 72 76 69 63 65 52 65 73 70 6f 6e 73 65 2e 52   erviceResponse.R
+0400  65 73 75 6c 74 20 6a 6f 63 68 65 6d 52 65 73 75   esult jochemResu
+0410  6c 74 20 3d 20 73 65 72 76 69 63 65 2e 66 69 6e   lt = service.fin
+0420  64 4a 6f 63 68 65 6d 45 6e 74 69 74 69 65 73 50   dJochemEntitiesP
+0430  61 67 65 64 28 74 65 78 74 2c 20 30 29 3b 0a 20   aged(text, 0);. 
+0440  20 20 20 20 20 66 6f 72 20 28 4f 6e 74 6f 6c 6f        for (Ontolo
+0450  67 79 53 65 72 76 69 63 65 52 65 73 70 6f 6e 73   gyServiceRespons
+0460  65 2e 46 69 6e 64 69 6e 67 20 66 69 6e 64 69 6e   e.Finding findin
+0470  67 20 3a 20 6a 6f 63 68 65 6d 52 65 73 75 6c 74   g : jochemResult
+0480  2e 67 65 74 46 69 6e 64 69 6e 67 73 28 29 29 20   .getFindings()) 
+0490  7b 0a 20 20 20 20 20 20 20 20 63 6f 6e 63 65 70   {.        concep
+04a0  74 4c 69 73 74 2e 61 64 64 28 66 69 6e 64 69 6e   tList.add(findin
+04b0  67 2e 67 65 74 43 6f 6e 63 65 70 74 28 29 2e 67   g.getConcept().g
+04c0  65 74 55 72 69 28 29 29 3b 0a 20 20 20 20 20 20   etUri());.      
+04d0  20 20 63 6f 6e 66 69 64 65 6e 63 65 4c 69 73 74     confidenceList
+04e0  2e 61 64 64 28 66 69 6e 64 69 6e 67 2e 67 65 74   .add(finding.get
+04f0  53 63                                             Sc
+
+0000  d4 be d9 50 fa b2 40 3c fc 01 04 85 08 00 45 08   ...P..@<......E.
+0010  05 dc 72 47 40 00 40 06 3f 79 c0 a8 01 02 c0 a8   ..rG@.@.?y......
+0020  01 01 00 14 df 75 e1 89 d7 42 28 0a 7e ea 80 10   .....u...B(.~...
+0030  01 c9 58 39 00 00 01 01 08 0a 00 f8 b5 03 00 07   ..X9............
+0040  27 99 6f 72 65 28 29 29 3b 0a 20 20 20 20 20 20   '.ore());.      
+0050  7d 0a 20 20 20 20 20 20 63 6f 6e 63 65 70 74 54   }.      conceptT
+0060  79 70 65 53 79 73 2e 73 65 74 4e 61 6d 65 28 22   ypeSys.setName("
+0070  4a 6f 63 68 65 6d 22 29 3b 0a 20 20 20 20 20 20   Jochem");.      
+0080  2f 2f 63 6f 6e 63 65 70 74 54 79 70 65 53 79 73   //conceptTypeSys
+0090  2e 73 65 74 55 72 69 73 28 55 74 69 6c 73 2e 63   .setUris(Utils.c
+00a0  72 65 61 74 65 53 74 72 69 6e 67 4c 69 73 74 28   reateStringList(
+00b0  61 4a 43 61 73 2c 20 63 6f 6e 63 65 70 74 4c 69   aJCas, conceptLi
+00c0  73 74 29 29 3b 0a 20 20 20 20 20 20 2f 2f 63 6f   st));.      //co
+00d0  6e 63 65 70 74 54 79 70 65 53 79 73 2e 73 65 74   nceptTypeSys.set
+00e0  4d 65 6e 74 69 6f 6e 73 28 55 74 69 6c 73 2e 66   Mentions(Utils.f
+00f0  72 6f 6d 43 6f 6c 6c 65 63 74 69 6f 6e 54 6f 46   romCollectionToF
+0100  53 4c 69 73 74 28 61 4a 43 61 73 2c 20 28 43 6f   SList(aJCas, (Co
+0110  6c 6c 65 63 74 69 6f 6e 29 20 63 6f 6e 66 69 64   llection) confid
+0120  65 6e 63 65 4c 69 73 74 29 29 3b 0a 20 20 20 20   enceList));.    
+0130  20 20 63 6f 6e 63 65 70 74 54 79 70 65 53 79 73     conceptTypeSys
+0140  2e 61 64 64 54 6f 49 6e 64 65 78 65 73 28 61 4a   .addToIndexes(aJ
+0150  43 61 73 29 3b 0a 20 20 20 20 20 20 63 6f 6e 63   Cas);.      conc
+0160  65 70 74 4c 69 73 74 20 3d 20 6e 65 77 20 41 72   eptList = new Ar
+0170  72 61 79 4c 69 73 74 3c 53 74 72 69 6e 67 3e 28   rayList<String>(
+0180  29 3b 0a 20 20 20 20 20 20 63 6f 6e 66 69 64 65   );.      confide
+0190  6e 63 65 4c 69 73 74 20 3d 20 6e 65 77 20 41 72   nceList = new Ar
+01a0  72 61 79 4c 69 73 74 3c 44 6f 75 62 6c 65 3e 28   rayList<Double>(
+01b0  29 3b 0a 20 20 20 20 20 20 63 6f 6e 63 65 70 74   );.      concept
+01c0  54 79 70 65 53 79 73 20 3d 20 6e 65 77 20 43 6f   TypeSys = new Co
+01d0  6e 63 65 70 74 28 61 4a 43 61 73 29 3b 0a 20 20   ncept(aJCas);.  
+01e0  20 20 20 20 4f 6e 74 6f 6c 6f 67 79 53 65 72 76       OntologyServ
+01f0  69 63 65 52 65 73 70 6f 6e 73 65 2e 52 65 73 75   iceResponse.Resu
+0200  6c 74 20 6d 65 73 68 52 65 73 75 6c 74 20 3d 20   lt meshResult = 
+0210  73 65 72 76 69 63 65 2e 66 69 6e 64 4d 65 73 68   service.findMesh
+0220  45 6e 74 69 74 69 65 73 50 61 67 65 64 28 74 65   EntitiesPaged(te
+0230  78 74 2c 20 30 29 3b 0a 20 20 20 20 20 20 66 6f   xt, 0);.      fo
+0240  72 20 28 4f 6e 74 6f 6c 6f 67 79 53 65 72 76 69   r (OntologyServi
+0250  63 65 52 65 73 70 6f 6e 73 65 2e 46 69 6e 64 69   ceResponse.Findi
+0260  6e 67 20 66 69 6e 64 69 6e 67 20 3a 20 6d 65 73   ng finding : mes
+0270  68 52 65 73 75 6c 74 2e 67 65 74 46 69 6e 64 69   hResult.getFindi
+0280  6e 67 73 28 29 29 20 7b 0a 20 20 20 20 20 20 20   ngs()) {.       
+0290  20 63 6f 6e 63 65 70 74 4c 69 73 74 2e 61 64 64    conceptList.add
+02a0  28 66 69 6e 64 69 6e 67 2e 67 65 74 43 6f 6e 63   (finding.getConc
+02b0  65 70 74 28 29 2e 67 65 74 55 72 69 28 29 29 3b   ept().getUri());
+02c0  0a 20 20 20 20 20 20 20 20 63 6f 6e 66 69 64 65   .        confide
+02d0  6e 63 65 4c 69 73 74 2e 61 64 64 28 66 69 6e 64   nceList.add(find
+02e0  69 6e 67 2e 67 65 74 53 63 6f 72 65 28 29 29 3b   ing.getScore());
+02f0  0a 20 20 20 20 20 20 7d 0a 20 20 20 20 20 20 63   .      }.      c
+0300  6f 6e 63 65 70 74 54 79 70 65 53 79 73 2e 73 65   onceptTypeSys.se
+0310  74 4e 61 6d 65 28 22 4d 65 53 48 22 29 3b 0a 20   tName("MeSH");. 
+0320  20 20 20 20 20 2f 2f 63 6f 6e 63 65 70 74 54 79        //conceptTy
+0330  70 65 53 79 73 2e 73 65 74 55 72 69 73 28 55 74   peSys.setUris(Ut
+0340  69 6c 73 2e 63 72 65 61 74 65 53 74 72 69 6e 67   ils.createString
+0350  4c 69 73 74 28 61 4a 43 61 73 2c 20 63 6f 6e 63   List(aJCas, conc
+0360  65 70 74 4c 69 73 74 29 29 3b 0a 20 20 20 20 20   eptList));.     
+0370  20 2f 2f 63 6f 6e 63 65 70 74 54 79 70 65 53 79    //conceptTypeSy
+0380  73 2e 73 65 74 4d 65 6e 74 69 6f 6e 73 28 55 74   s.setMentions(Ut
+0390  69 6c 73 2e 66 72 6f 6d 43 6f 6c 6c 65 63 74 69   ils.fromCollecti
+03a0  6f 6e 54 6f 46 53 4c 69 73 74 28 61 4a 43 61 73   onToFSList(aJCas
+03b0  2c 20 28 43 6f 6c 6c 65 63 74 69 6f 6e 29 20 63   , (Collection) c
+03c0  6f 6e 66 69 64 65 6e 63 65 4c 69 73 74 29 29 3b   onfidenceList));
+03d0  0a 20 20 20 20 20 20 63 6f 6e 63 65 70 74 54 79   .      conceptTy
+03e0  70 65 53 79 73 2e 61 64 64 54 6f 49 6e 64 65 78   peSys.addToIndex
+03f0  65 73 28 61 4a 43 61 73 29 3b 0a 20 20 20 20 20   es(aJCas);.     
+0400  20 63 6f 6e 63 65 70 74 4c 69 73 74 20 3d 20 6e    conceptList = n
+0410  65 77 20 41 72 72 61 79 4c 69 73 74 3c 53 74 72   ew ArrayList<Str
+0420  69 6e 67 3e 28 29 3b 0a 20 20 20 20 20 20 63 6f   ing>();.      co
+0430  6e 66 69 64 65 6e 63 65 4c 69 73 74 20 3d 20 6e   nfidenceList = n
+0440  65 77 20 41 72 72 61 79 4c 69 73 74 3c 44 6f 75   ew ArrayList<Dou
+0450  62 6c 65 3e 28 29 3b 0a 20 20 20 20 20 20 63 6f   ble>();.      co
+0460  6e 63 65 70 74 54 79 70 65 53 79 73 20 3d 20 6e   nceptTypeSys = n
+0470  65 77 20 43 6f 6e 63 65 70 74 28 61 4a 43 61 73   ew Concept(aJCas
+0480  29 3b 0a 20 20 20 20 20 20 4f 6e 74 6f 6c 6f 67   );.      Ontolog
+0490  79 53 65 72 76 69 63 65 52 65 73 70 6f 6e 73 65   yServiceResponse
+04a0  2e 52 65 73 75 6c 74 20 75 6e 69 70 72 6f 74 52   .Result uniprotR
+04b0  65 73 75 6c 74 20 3d 20 73 65 72 76 69 63 65 2e   esult = service.
+04c0  66 69 6e 64 55 6e 69 70 72 6f 74 45 6e 74 69 74   findUniprotEntit
+04d0  69 65 73 50 61 67 65 64 28 74 65 78 74 2c 20 30   iesPaged(text, 0
+04e0  29 3b 0a 20 20 20 20 20 20 66 6f 72 20 28 4f 6e   );.      for (On
+04f0  74 6f 6c 6f 67 79 53 65 72 76 69 63 65 52 65 73   tologyServiceRes
+0500  70 6f 6e 73 65 2e 46 69 6e 64 69 6e 67 20 66 69   ponse.Finding fi
+0510  6e 64 69 6e 67 20 3a 20 75 6e 69 70 72 6f 74 52   nding : uniprotR
+0520  65 73 75 6c 74 2e 67 65 74 46 69 6e 64 69 6e 67   esult.getFinding
+0530  73 28 29 29 20 7b 0a 20 20 20 20 20 20 20 20 63   s()) {.        c
+0540  6f 6e 63 65 70 74 4c 69 73 74 2e 61 64 64 28 66   onceptList.add(f
+0550  69 6e 64 69 6e 67 2e 67 65 74 43 6f 6e 63 65 70   inding.getConcep
+0560  74 28 29 2e 67 65 74 55 72 69 28 29 29 3b 0a 20   t().getUri());. 
+0570  20 20 20 20 20 20 20 63 6f 6e 66 69 64 65 6e 63          confidenc
+0580  65 4c 69 73 74 2e 61 64 64 28 66 69 6e 64 69 6e   eList.add(findin
+0590  67 2e 67 65 74 53 63 6f 72 65 28 29 29 3b 0a 20   g.getScore());. 
+05a0  20 20 20 20 20 7d 0a 20 20 20 20 20 20 63 6f 6e        }.      con
+05b0  63 65 70 74 54 79 70 65 53 79 73 2e 73 65 74 4e   ceptTypeSys.setN
+05c0  61 6d 65 28 22 55 6e 69 50 72 6f 74 22 29 3b 0a   ame("UniProt");.
+05d0  20 20 20 20 20 20 2f 2f 63 6f 6e 63 65 70 74 54         //conceptT
+05e0  79 70 65 53 79 73 2e 73 65 74                     ypeSys.set
+
+0000  d4 be d9 50 fa b2 40 3c fc 01 04 85 08 00 45 08   ...P..@<......E.
+0010  07 19 72 48 40 00 40 06 3e 3b c0 a8 01 02 c0 a8   ..rH@.@.>;......
+0020  01 01 00 14 df 75 e1 89 dc ea 28 0a 7e ea 80 19   .....u....(.~...
+0030  01 c9 8a 5f 00 00 01 01 08 0a 00 f8 b5 03 00 07   ..._............
+0040  27 99 55 72 69 73 28 55 74 69 6c 73 2e 63 72 65   '.Uris(Utils.cre
+0050  61 74 65 53 74 72 69 6e 67 4c 69 73 74 28 61 4a   ateStringList(aJ
+0060  43 61 73 2c 20 63 6f 6e 63 65 70 74 4c 69 73 74   Cas, conceptList
+0070  29 29 3b 0a 20 20 20 20 20 20 2f 2f 63 6f 6e 63   ));.      //conc
+0080  65 70 74 54 79 70 65 53 79 73 2e 73 65 74 4d 65   eptTypeSys.setMe
+0090  6e 74 69 6f 6e 73 28 55 74 69 6c 73 2e 66 72 6f   ntions(Utils.fro
+00a0  6d 43 6f 6c 6c 65 63 74 69 6f 6e 54 6f 46 53 4c   mCollectionToFSL
+00b0  69 73 74 28 61 4a 43 61 73 2c 20 28 43 6f 6c 6c   ist(aJCas, (Coll
+00c0  65 63 74 69 6f 6e 29 20 63 6f 6e 66 69 64 65 6e   ection) confiden
+00d0  63 65 4c 69 73 74 29 29 3b 0a 20 20 20 20 20 20   ceList));.      
+00e0  63 6f 6e 63 65 70 74 54 79 70 65 53 79 73 2e 61   conceptTypeSys.a
+00f0  64 64 54 6f 49 6e 64 65 78 65 73 28 61 4a 43 61   ddToIndexes(aJCa
+0100  73 29 3b 0a 20 20 20 20 20 20 2f 2f 20 54 72 69   s);.      // Tri
+0110  70 6c 65 73 0a 20 20 20 20 20 20 4c 69 6e 6b 65   ples.      Linke
+0120  64 4c 69 66 65 44 61 74 61 53 65 72 76 69 63 65   dLifeDataService
+0130  52 65 73 70 6f 6e 73 65 2e 52 65 73 75 6c 74 20   Response.Result 
+0140  6c 69 6e 6b 65 64 4c 69 66 65 44 61 74 61 52 65   linkedLifeDataRe
+0150  73 75 6c 74 20 3d 20 73 65 72 76 69 63 65 0a 20   sult = service. 
+0160  20 20 20 20 20 20 20 20 20 20 20 20 20 2e 66 69                .fi
+0170  6e 64 4c 69 6e 6b 65 64 4c 69 66 65 44 61 74 61   ndLinkedLifeData
+0180  45 6e 74 69 74 69 65 73 50 61 67 65 64 28 74 65   EntitiesPaged(te
+0190  78 74 2c 20 30 29 3b 0a 20 20 20 20 20 20 2f 2f   xt, 0);.      //
+01a0  20 53 79 73 74 65 6d 2e 6f 75 74 2e 70 72 69 6e    System.out.prin
+01b0  74 6c 6e 28 22 4c 69 6e 6b 65 64 4c 69 66 65 44   tln("LinkedLifeD
+01c0  61 74 61 3a 20 22 20 2b 20 6c 69 6e 6b 65 64 4c   ata: " + linkedL
+01d0  69 66 65 44 61 74 61 52 65 73 75 6c 74 2e 67 65   ifeDataResult.ge
+01e0  74 45 6e 74 69 74 69 65 73 28 29 2e 73 69 7a 65   tEntities().size
+01f0  28 29 29 3b 0a 20 20 20 20 20 20 66 6f 72 20 28   ());.      for (
+0200  4c 69 6e 6b 65 64 4c 69 66 65 44 61 74 61 53 65   LinkedLifeDataSe
+0210  72 76 69 63 65 52 65 73 70 6f 6e 73 65 2e 45 6e   rviceResponse.En
+0220  74 69 74 79 20 65 6e 74 69 74 79 20 3a 20 6c 69   tity entity : li
+0230  6e 6b 65 64 4c 69 66 65 44 61 74 61 52 65 73 75   nkedLifeDataResu
+0240  6c 74 2e 67 65 74 45 6e 74 69 74 69 65 73 28 29   lt.getEntities()
+0250  29 20 7b 0a 20 20 20 20 20 20 20 20 2f 2f 20 53   ) {.        // S
+0260  79 73 74 65 6d 2e 6f 75 74 2e 70 72 69 6e 74 6c   ystem.out.printl
+0270  6e 28 22 20 3e 20 22 20 2b 20 65 6e 74 69 74 79   n(" > " + entity
+0280  2e 67 65 74 45 6e 74 69 74 79 28 29 29 3b 0a 20   .getEntity());. 
+0290  20 20 20 20 20 20 20 66 6f 72 20 28 4c 69 6e 6b          for (Link
+02a0  65 64 4c 69 66 65 44 61 74 61 53 65 72 76 69 63   edLifeDataServic
+02b0  65 52 65 73 70 6f 6e 73 65 2e 52 65 6c 61 74 69   eResponse.Relati
+02c0  6f 6e 20 72 65 6c 61 74 69 6f 6e 20 3a 20 65 6e   on relation : en
+02d0  74 69 74 79 2e 67 65 74 52 65 6c 61 74 69 6f 6e   tity.getRelation
+02e0  73 28 29 29 20 7b 0a 20 20 20 20 20 20 20 20 20   s()) {.         
+02f0  20 74 72 69 70 6c 65 54 79 70 65 53 79 73 20 3d    tripleTypeSys =
+0300  20 6e 65 77 20 54 72 69 70 6c 65 28 61 4a 43 61    new Triple(aJCa
+0310  73 29 3b 0a 20 20 20 20 20 20 20 20 20 20 74 72   s);.          tr
+0320  69 70 6c 65 54 79 70 65 53 79 73 2e 73 65 74 4f   ipleTypeSys.setO
+0330  62 6a 65 63 74 28 72 65 6c 61 74 69 6f 6e 2e 67   bject(relation.g
+0340  65 74 4f 62 6a 28 29 29 3b 0a 20 20 20 20 20 20   etObj());.      
+0350  20 20 20 20 74 72 69 70 6c 65 54 79 70 65 53 79       tripleTypeSy
+0360  73 2e 73 65 74 53 75 62 6a 65 63 74 28 72 65 6c   s.setSubject(rel
+0370  61 74 69 6f 6e 2e 67 65 74 53 75 62 6a 28 29 29   ation.getSubj())
+0380  3b 0a 20 20 20 20 20 20 20 20 20 20 74 72 69 70   ;.          trip
+0390  6c 65 54 79 70 65 53 79 73 2e 73 65 74 50 72 65   leTypeSys.setPre
+03a0  64 69 63 61 74 65 28 72 65 6c 61 74 69 6f 6e 2e   dicate(relation.
+03b0  67 65 74 50 72 65 64 28 29 29 3b 0a 20 20 20 20   getPred());.    
+03c0  20 20 20 20 20 20 74 72 69 70 6c 65 54 79 70 65         tripleType
+03d0  53 79 73 2e 61 64 64 54 6f 49 6e 64 65 78 65 73   Sys.addToIndexes
+03e0  28 61 4a 43 61 73 29 3b 0a 20 20 20 20 20 20 20   (aJCas);.       
+03f0  20 7d 0a 20 20 20 20 20 20 7d 0a 20 20 20 20 20    }.      }.     
+0400  20 50 75 62 4d 65 64 53 65 61 72 63 68 53 65 72    PubMedSearchSer
+0410  76 69 63 65 52 65 73 70 6f 6e 73 65 2e 52 65 73   viceResponse.Res
+0420  75 6c 74 20 70 75 62 6d 65 64 52 65 73 75 6c 74   ult pubmedResult
+0430  20 3d 20 73 65 72 76 69 63 65 2e 66 69 6e 64 50    = service.findP
+0440  75 62 4d 65 64 43 69 74 61 74 69 6f 6e 73 28 74   ubMedCitations(t
+0450  65 78 74 2c 20 30 29 3b 0a 20 20 20 20 20 20 4c   ext, 0);.      L
+0460  69 73 74 3c 44 6f 63 75 6d 65 6e 74 3e 20 64 6f   ist<Document> do
+0470  63 4c 69 73 74 20 3d 20 70 75 62 6d 65 64 52 65   cList = pubmedRe
+0480  73 75 6c 74 2e 67 65 74 44 6f 63 75 6d 65 6e 74   sult.getDocument
+0490  73 28 29 3b 0a 20 20 20 20 20 20 2f 2f 20 53 74   s();.      // St
+04a0  72 69 6e 67 5b 5d 20 70 6d 69 64 73 20 3d 20 6e   ring[] pmids = n
+04b0  65 77 20 53 74 72 69 6e 67 5b 64 6f 63 4c 69 73   ew String[docLis
+04c0  74 2e 73 69 7a 65 28 29 5d 3b 0a 20 20 20 20 20   t.size()];.     
+04d0  20 2f 2f 20 69 6e 74 20 69 20 3d 20 30 3b 0a 20    // int i = 0;. 
+04e0  20 20 20 20 20 66 6f 72 20 28 44 6f 63 75 6d 65        for (Docume
+04f0  6e 74 20 64 6f 63 20 3a 20 64 6f 63 4c 69 73 74   nt doc : docList
+0500  29 20 7b 0a 20 20 20 20 20 20 20 20 64 6f 63 75   ) {.        docu
+0510  6d 65 6e 74 54 79 70 65 53 79 73 20 3d 20 6e 65   mentTypeSys = ne
+0520  77 20 65 64 75 2e 63 6d 75 2e 6c 74 69 2e 6f 61   w edu.cmu.lti.oa
+0530  71 61 2e 74 79 70 65 2e 72 65 74 72 69 65 76 61   qa.type.retrieva
+0540  6c 2e 44 6f 63 75 6d 65 6e 74 28 61 4a 43 61 73   l.Document(aJCas
+0550  29 3b 0a 20 20 20 20 20 20 20 20 64 6f 63 75 6d   );.        docum
+0560  65 6e 74 54 79 70 65 53 79 73 2e 73 65 74 54 69   entTypeSys.setTi
+0570  74 6c 65 28 22 68 74 74 70 3a 2f 2f 77 77 77 2e   tle("http://www.
+0580  6e 63 62 69 2e 6e 6c 6d 2e 6e 69 68 2e 67 6f 76   ncbi.nlm.nih.gov
+0590  2f 70 75 62 6d 65 64 2f 22 20 2b 20 64 6f 63 2e   /pubmed/" + doc.
+05a0  67 65 74 50 6d 69 64 28 29 29 3b 0a 20 20 20 20   getPmid());.    
+05b0  20 20 20 20 64 6f 63 75 6d 65 6e 74 54 79 70 65       documentType
+05c0  53 79 73 2e 73 65 74 44 6f 63 49 64 28 64 6f 63   Sys.setDocId(doc
+05d0  2e 67 65 74 50 6d 69 64 28 29 29 3b 0a 20 20 20   .getPmid());.   
+05e0  20 20 20 20 20 64 6f 63 75 6d 65 6e 74 54 79 70        documentTyp
+05f0  65 53 79 73 2e 61 64 64 54 6f 49 6e 64 65 78 65   eSys.addToIndexe
+0600  73 28 61 4a 43 61 73 29 3b 0a 20 20 20 20 20 20   s(aJCas);.      
+0610  20 20 2f 2f 20 64 6f 63 75 6d 65 6e 74 54 79 70     // documentTyp
+0620  65 53 79 73 2e 73 65 74 44 6f 63 49 64 28 64 6f   eSys.setDocId(do
+0630  63 29 3b 0a 20 20 20 20 20 20 20 20 2f 2f 20 70   c);.        // p
+0640  6d 69 64 73 5b 69 2b 2b 5d 20 3d 20 22 68 74 74   mids[i++] = "htt
+0650  70 3a 2f 2f 77 77 77 2e 6e 63 62 69 2e 6e 6c 6d   p://www.ncbi.nlm
+0660  2e 6e 69 68 2e 67 6f 76 2f 70 75 62 6d 65 64 2f   .nih.gov/pubmed/
+0670  22 20 2b 20 64 6f 63 2e 67 65 74 50 6d 69 64 28   " + doc.getPmid(
+0680  29 3b 0a 20 20 20 20 20 20 20 20 2f 2f 20 53 79   );.        // Sy
+0690  73 74 65 6d 2e 6f 75 74 2e 70 72 69 6e 74 6c 6e   stem.out.println
+06a0  28 20 70 6d 69 64 73 5b 69 20 2d 20 31 5d 29 3b   ( pmids[i - 1]);
+06b0  0a 20 20 20 20 20 20 7d 0a 20 20 20 20 7d 20 63   .      }.    } c
+06c0  61 74 63 68 20 28 49 4f 45 78 63 65 70 74 69 6f   atch (IOExceptio
+06d0  6e 20 65 29 20 7b 0a 20 20 20 20 20 20 2f 2f 20   n e) {.      // 
+06e0  54 4f 44 4f 20 41 75 74 6f 2d 67 65 6e 65 72 61   TODO Auto-genera
+06f0  74 65 64 20 63 61 74 63 68 20 62 6c 6f 63 6b 0a   ted catch block.
+0700  20 20 20 20 20 20 65 2e 70 72 69 6e 74 53 74 61         e.printSta
+0710  63 6b 54 72 61 63 65 28 29 3b 0a 20 20 20 20 7d   ckTrace();.    }
+0720  0a 20 20 7d 0a 7d 0a                              .  }.}.

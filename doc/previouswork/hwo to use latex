@@ -1,0 +1,9 @@
+latex test.tex
+
+Now you need to view the output file with xdvi:
+
+xdvi test.dvi &
+
+pdflatex test.tex
+
+Note that if you are creating PDFs then you shouldn't use EPS (encapsulated postscript) for images

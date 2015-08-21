@@ -1,0 +1,17 @@
+rfc 959 numeric ftp code meanings
+
+
+www.w3.org/Protocols/rfc959/4_FileTransfer.html
+
+
+ftp
+
+The File Transfer Protocol (FTP) is a standard network protocol used to transfer computer files from one host to another host over a TCP-based network, such as the Internet. FTP is built on a client-server architecture and uses separate control and data connections between the client and the server. FTP users may authenticate themselves using a clear-text sign-in protocol, normally in the form of a username and password, but can connect anonymously if the server is configured to allow it. For secure transmission that protects the username and password, and encrypts the content, FTP is often secured with SSL/TLS (FTPS). SSH File Transfer Protocol (SFTP) is sometimes also used instead, but is technologically different.
+
+
+Communication and data transfer
+Illustration of starting a passive connection using port 21
+
+FTP may run in active or passive mode, which determines how the data connection is established.[5] In both cases, the client creates a TCP control connection from a random, usually an unprivileged, port N to the FTP server command port 21. In active mode, the client starts listening for incoming data connections from the server on port M. It sends the FTP command PORT M to inform the server on which port it is listening. By default, M=N. The server then initiates a data channel to the client from its port 20, the FTP server data port. In situations where the client is behind a firewall and unable to accept incoming TCP connections, passive mode may be used. In this mode, the client uses the control connection to send a PASV command to the server and then receives a server IP address and server port number from the server,[5][6] which the client then uses to open a data connection from an arbitrary client port to the server IP address and server port number received.[7] Both modes were updated in September 1998 to support IPv6. Further changes were introduced to the passive mode at that time, updating it to extended passive mode.[8]
+
+The server responds over the control connection with three-digit status codes in ASCII with an optional text message. For example "200" (or "200 OK") means that the last command was successful. The numbers represent the code for the response and the optional text represents a human-readable explanation or request (e.g. <Need account for storing file>).[1] An ongoing transfer of file data over the data connection can be aborted using an interrupt message sent over the control connection.

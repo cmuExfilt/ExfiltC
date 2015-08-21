@@ -1,0 +1,54 @@
+connect two ubuntu with crossover wire
+http://www.ehow.com/how_8363411_connect-two-linux-pcs.html
+
+
+send file from host to server, using ftp
+
+http://ubuntuforums.org/showthread.php?t=1899385
+
+https://vikashazrati.wordpress.com/2008/02/03/quicktip-transferring-files-between-two-ubuntu-systems/
+
+
+vsfpd:
+https://security.appspot.com/vsftpd.html
+
+www.linuxidc.com/Linux/2012-05/59707.htm
+
+1 as remote server
+2 as user, send file to 1 using ftp
+
+either 1 get aaa.c from 2
+or 2 put aaa.c to 1
+
+
+wireshark:
+https://www.youtube.com/watch?v=0DBZiKpbHO0
+
+check ftp _> aaa.c successful!
+
+
+jira
+https://cyplex.atlassian.net/login?dest-url=%2Fsecure%2FMyJiraHome.jspa
+
+
+
+
+sha1 (secure hash algorithm)
+
+en.wikipedia.org/wiki/SHA-1
+
+www.sha1-online.com/sha1-java/
+
+sha1 online generator
+www.sha1-online.com
+
+
+about packet filtering:
+https://www.youtube.com/watch?v=q_sljq2E4NA
+
+
+
+ftp:
+
+www.cs.ccsu.edu/~stan/classes/CS490/Slides/Networks5-Ch2-3.pdf
+

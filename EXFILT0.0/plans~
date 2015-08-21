@@ -1,0 +1,8 @@
+ersion 0.1 
+This iteration involves the construction of a proxy server-like buffer (in Java) for accumulating the entire set of packets in a transmission, for subsequent inspection of file attributes (such as file type), and syntactic analysis against a cohesive file.  The buffering system at this point does not need to implement any filtering/detection methods.  It simply needs to be able to accumulate the packets in a transmission, then either stop the transmission by sending it forward, or forward the transmission on to its final destination.
+Version 0.2 
+This iteration of the prototype will include one or more of the following, depending on priorities, time, resources and discoveries as they stand at the completion of Version 0.1:
+A. An interface for end users to define syntactic filters (words, phrases and patterns) to be used for detecting sensitive information in transmissions accumulated in the Buffering system built in v0.1
+B. Automated redaction of sensitive information through replacement of detected sensitive information patterns with innocuous text prior to re-transmission to the final destination
+C. Support for file formats other than plain text (e.g.: .docx, .pdf, .xls, etc…)  Open source, Java-based readers for various file formats might be used for this effort.  Since the goal of Version 0 is a functional Proof Of Concept, proprietary document readers with lower latency can be built in later development efforts.
+D. Support for filtering email attachments, as well as communication protocols other than FTP.  This effort could encompass changes to both the Buffering and Filtering system and the SNORT plugin built in version 0.0.
